@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css"></link>
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.css"></link>
+<link rel="stylesheet" type="text/css" href="css/shadowbox.css" ></link>
+<link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon"/></link>
+<body>
+
+<div id="container">
+   <div id="leftnav">
+
+<img id="crest" src="image/homelogo.jpg" alt="NYU"/>
+    <ul class="nav">
+     <li class="highlight">
+      <a bgcolor="grey" href="http://www.google.com">My Questions</a>
+     </li>
+     <li class="highlight">
+      <a href="http://www.facebook.com">My Answers</a>
+     </li>
+     <li class="highlight">
+      <a href="http://www.linkedin.com">My Votes</a>
+     </li>
+     <li class="highlight">
+      <a href="http://www.amazon.com">My Images</a>
+     </li>
+    </ul>
+</div> 
+<!-- leftnav -->
+<div id="content">
+
+	<h1><a href="question/new">+ Question?</a></h1>
+    <div id="header">
+     <div class="headertitle">View existing questions:</div>
+ 	</div>
+  <!-- header -->
+<div id="questionlist" class="drop-shadow raised">
+<p class='subheader'>Question name.</p>
+<p class="questioncontent"> Question content... </p>
+</div>
+ <!-- questionlist -->
+</div>
+<!-- content -->
+</div>
+<!-- container -->
+{% endautoescape %}
