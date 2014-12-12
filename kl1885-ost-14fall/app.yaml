@@ -11,8 +11,32 @@ handlers:
 - url: /image
   static_dir: image
 
-- url: .*
-  script: py.main.app
+- url: /myimage/.*
+  script: py.image.app
+
+- url: /rss
+  script: py.rss.app
+
+- url: /rss/.*
+  script: py.rss.app
+
+- url: /question
+  script: py.question.app
+
+- url: /question/.*
+  script: py.question.app
+
+- url: /questionhome
+  script: py.homepage.app
+
+- url: /questionhome/.*
+  script: py.homepage.app
+
+- url: /sort
+  script: py.homepage.app
+
+- url: /.*
+  script: py.homepage.app
 
 libraries:
 - name: webapp2
