@@ -2,7 +2,6 @@
 {% autoescape true %}
 
 <!-- Begin loops-->
-{% for q in Qs %}
 <div id="questionlist" class="drop-shadow raised">
 {%  if q.q_tags|length >0 %}
 {% for t in q.q_tags %}
@@ -10,19 +9,13 @@
 {% endfor %}
 {% endif %}
 <p style="font-size:200%">{{ q.q_title }}</p>
-{%  if q.q_content|length > 500 %}
-<p style="font-size:140%">{{ q.q_content[:500] }}...</p>
-{% else %}
 <p style="font-size:140%">{{ q.q_content }}</p>
-{%  endif %}
 <div>----Created by {{ q.q_user }} on {{ q.create_time }}.</div>
 {% if q.edit_time != None and q.edit_time != q.create_time %}
 <div>----Edited by on  {{ q.edit_time }}.</div>
 {% endif %}
-<h3><a href="/question/view?quser={{ q.q_user }}&qid={{ q.q_id }}">View full question</a>
-&nbsp;&nbsp;
+<h3>
 {% if view_my_question %}
-<a href="/question/edit?qid={{ q.q_id }}">Edit your own question</a>&nbsp;&nbsp;
 <a href="/question/answer/add?qid={{ q.q_id }}">Answer this question</a>
 </h3>
 {% endif %}
@@ -32,8 +25,8 @@
 <a href="/user/view?{{q.q_user}}">View this user</a>
 </h3>
 {% else %}
-<a href="/question/answer/add?qid={{ q.q_id }}">Answer this question</a>
-&nbsp;&nbsp;<a href="/question/edit?qid={{ q.q_id }}&quser={{ q.q_user }}">Edit your own question</a>
+<a href="/question/answer/add?qid={{ q.q_id }}">Answer this question</a>&nbsp;&nbsp;
+<a href="/question/edit?qid={{ q.q_id }}&quser={{ q.q_user }}">Edit your own question</a>
 </h3>
 {% endif %}
 {% endif %}
@@ -45,7 +38,6 @@
 <input type='submit' value='Up' name='vote'  />
 <input type='submit' value='Down' name='vote' />
 </form>
-{% endfor %}
 <!-- End loops-->
 <!-- questionlist -->
 </div>

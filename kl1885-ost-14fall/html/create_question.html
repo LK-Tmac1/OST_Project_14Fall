@@ -2,13 +2,23 @@
 {% autoescape true %}
 
 <div id="questionform">
-<form action="{{ action_url }}" enctype="multipart/form-data" method="post">
+<form enctype="multipart/form-data" method="post">
 
 <br><br>
 
   <div >
   	<div id="header">
   <div class="headertitle">What do you want to ask?</div>
+</div>
+<br>
+
+<input type="text" name="qtitle" style="width: 670px; padding: 2px; " />
+<br>
+<br>
+<br>
+
+  	<div id="header">
+  <div class="headertitle">Give more specific details about this question, please?</div>
 </div>
   <textarea rows='12' cols='90' name='qcontent' style="font-size:140%"></textarea><br><br>
 <br>
@@ -22,7 +32,7 @@
 <br>
 <br>
 <input type='submit' value='Submit' name='submit'  />
-  <input type='submit' value='Cancel' name='submit' />
+<input type='submit' value='Cancel' name='submit' />
 </form>
 </div>
 {% endautoescape %}

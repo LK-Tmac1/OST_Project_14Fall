@@ -14,6 +14,9 @@ handlers:
 - url: /myimage/.*
   script: py.image.app
 
+- url: /myquestion
+  script: py.question.app
+
 - url: /rss
   script: py.rss.app
 
@@ -26,17 +29,12 @@ handlers:
 - url: /question/.*
   script: py.question.app
 
-- url: /questionhome
-  script: py.homepage.app
-
-- url: /questionhome/.*
-  script: py.homepage.app
-
-- url: /sort
+- url: /homepage
   script: py.homepage.app
 
 - url: /.*
   script: py.homepage.app
+
 
 libraries:
 - name: webapp2
