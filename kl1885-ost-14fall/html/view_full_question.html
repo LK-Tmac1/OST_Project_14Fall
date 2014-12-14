@@ -12,29 +12,20 @@ href="/question/tag?keyword={{ t }}&mode={{ tag_mode }}">
 {% endfor %}
 {% endif %}
 <p style="font-size:200%">{{ q.q_title }}</p>
-<p style="font-size:140%">{{ q.q_content }}</p>
-<div>----
-	Created by {{ q.q_user }} on {{ q.create_time }}.</div>
+<p style="font-size:140%">{{ q.q_content | safe }}</p>
 {% if q.edit_time != None and q.edit_time != q.create_time %}
-<div>----
-	Edited by on  {{ q.edit_time }}.</div>
+<div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
+<div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
 <h3>
-{% if view_my_question %}
+{% if q.q_user|string() != current_user|string() %}
+<a href="/user/view?{{q.q_user}}">View this user</a>
+{% else %}
+<a href="/question/edit?qid={{ q.q_id }}">Edit</a>
+{% endif %}
+&nbsp;&nbsp;
 <a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>
 </h3>
-{% endif %}
-{% if not view_my_question %}
-{% if q.q_user|string() != current_user|string() %}
-<a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>&nbsp;&nbsp;
-<a href="/user/view?{{q.q_user}}">View this user</a>
-</h3>
-{% else %}
-<a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>&nbsp;&nbsp;
-<a href="/question/edit?qid={{ q.q_id }}">Edit</a>
-</h3>
-{% endif %}
-{% endif %}
 <h4>{{ q.vp_num }} Up {{ q.vd_num }} Down</h4>
 </div>
 <form enctype="multipart/form-data" method="post">

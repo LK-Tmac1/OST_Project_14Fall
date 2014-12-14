@@ -21,7 +21,7 @@ MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
 HEADER_VIEW_ALL_Q='View all existed questions: '
 HEADER_VIEW_Q='View the full question: '
-HEADER_VIEW_MY_Q='View questions belong to you: '
+HEADER_VIEW_MY_Q='View my questions: '
 HEADER_VIEW_TAG_Q_ALL="All questions with tag: "
 HEADER_VIEW_TAG_Q_MINE="My Questions that with tag: "
 TEMP_LEFT_NAV='left_nav.html'
@@ -41,9 +41,11 @@ MESSAGE_EMPTY_Q_TITLE="Don't be too lazy to give it a title, please..."
 MESSAGE_EMPTY_Q_CONTENT="Oh please... ask some real stuff, OK?"
 MESSAGE_NO_SUCH_QID="Sorry, no such a question: "
 MESSAGE_SUCCEED_NEW_Q="New question added! You can go back My Question to view it."
+MESSAGE_SUCCEED_EDIT_Q="Question modified! You can go back My Question to view it."
 MESSAGE_CANNOT_EDIT_Q="Oh please, this question doesn't belong to you..."
 MESSAGE_NO_SUCH_Q_TAG="Sorry, no question for this tag: "
 MESSAGE_INVALID_PAGE_NUM="Invalid page number."
+MESSAGE_DUPLICATED_QID="Invalid questions cause duplicated with id: "
 MESSAGE_LOGIN_FIRST="You are now a guest so please login first."
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),

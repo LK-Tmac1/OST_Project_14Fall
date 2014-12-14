@@ -14,14 +14,15 @@ href="/question/{{ tag_mode }}?tag={{ t }}">#{{ t }}</a>
 {% endif %}
 <p style="font-size:200%">{{ q.q_title }}</p>
 {%  if q.q_content|length > 500 %}
-<p style="font-size:140%">{{ q.q_content[:500] }}...</p>
+<p style="font-size:140%">{{ q.q_content[:500] | safe }}...</p>
 {% else %}
-<p style="font-size:140%">{{ q.q_content }}</p>
+<p style="font-size:140%">{{ q.q_content | safe }}	
+</p>
 {%  endif %}
-<div>----Created by {{ q.q_user }} on {{ q.create_time }}.</div>
 {% if q.edit_time != None and q.edit_time != q.create_time %}
-<div>----Edited by on  {{ q.edit_time }}.</div>
+<div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
+<div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
 <h3><a href="/question/view?qid={{ q.q_id }}">View</a>
 &nbsp;&nbsp;
 {% if view_my_question %}

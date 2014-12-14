@@ -30,8 +30,6 @@ class Question(ndb.Model):
 	vd_num=ndb.IntegerProperty()
 	vp_num=ndb.IntegerProperty()
 
-
-
 	@classmethod
 	def get_by_qid(cls, qid):
 		question=Question.query(Question.q_id == qid)
@@ -39,7 +37,8 @@ class Question(ndb.Model):
 
 	@classmethod
 	def get_by_user_all(cls, quser):
-		question=Question.query(Question.q_user==quser).order(-Question.create_time)
+		question=Question.query(Question.q_user==quser).\
+		order(-Question.edit_time).order(-Question.create_time)
 		return question.fetch()
 
 	@classmethod

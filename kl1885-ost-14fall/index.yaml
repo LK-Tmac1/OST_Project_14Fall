@@ -12,6 +12,27 @@ indexes:
 
 - kind: Question
   properties:
+  - name: q_tags
+  - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_tags
   - name: q_user
+  - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_user
+  - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_user
+  - name: edit_time
+    direction: desc
   - name: create_time
     direction: desc

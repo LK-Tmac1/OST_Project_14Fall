@@ -1,7 +1,23 @@
-import os, urllib, datetime, jinja2, math, time, py.datamodel as model
+import os, urllib, datetime, jinja2, math, re, time, py.datamodel as model
 
 PAGE_LIMIT=10
 DEFAULT_DELIMIT=","
+
+def replace_image_html(content):
+	newstring = re.sub(r'(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)', r'<a href="\1">\1</a>', content)
+	content = re.sub(r'<a href="(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)">[^\s]+.jpg</a>', r'<img src="\1">', newstring)
+	newstring = re.sub(r'<a href="(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)">[^\s]+.png</a>', r'<img src="\1">', content)
+	content = re.sub(r'<a href="(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)">[^\s]+.gif</a>', r'<img src="\1">', newstring)
+	return content
+
+def replace_newline(content):
+	content=content.replace('\n', '<br>')
+	return content
+
+def replace_content(content):
+	content=replace_newline(content)
+	content=replace_image_html(content)
+	return content
 
 def max_page_num(length):
 	max_p = int(math.ceil(length/PAGE_LIMIT))+1
@@ -31,24 +47,8 @@ def get_previous_next_page(page_num, current_page):
 		next = page_num
 	return [previous, next]
 
-def vote_q(self):######
-	v_user=users.get_current_user()
-	qid=self.request.get("qid")
-	aid=self.request.get("aid")
-	up_down=self.request.get("vote")
-	v_time=datetime.datetime.now().replace(microsecond=0)
-	key=str(v_user)+"_"+str(qid)+"_"+str(aid)
-	#newV = model.Vote(key_name=key)
-	newV=model.Vote()
-	newV.v_user=unicode(v_user)
-	newV.q_id=qid
-	newV.a_id=aid
-	newV.up_down=up_down
-	newV.v_time=v_time
-	newV.put()
-
 def tag_split(tag_string, delimit=DEFAULT_DELIMIT):
-	tag_list = tag_string.replace(' ','').lower().split(',')
+	tag_list = tag_string.replace(' ','').lower().split(delimit)
   	for x in xrange(len(tag_list)):
   		tag_list[x] = tag_list[x].strip()
 		if tag_list[x] == '':
@@ -61,7 +61,7 @@ def merge_tags(tag_list):
 	tags=""
 	if len(tag_list) != 0:
 		for t in tag_list:
-			tags+=t+", "
+			tags+=t+DEFAULT_DELIMIT+" "
 		return tags[:len(tags)-2]
 	else:
 		return ""
