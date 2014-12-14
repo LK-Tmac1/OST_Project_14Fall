@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<h2>
+{% if num_of_page > 2 %}
+{% for p in range(1, num_of_page) %}
+{% if p == 1 %}
+<a href='?page={{ previous_page }}'>Previous</a>&nbsp;
+<a href='?page={{ p }}'>{{ p }}</a>&nbsp;
+{% else %}
+<a href='?page={{ p }}'>{{ p }}</a>&nbsp;
+{% endif %}
+{% if p == num_of_page-1 %}
+<a href='?page={{ next_page }}'>Next</a>&nbsp;
+{% endif %}
+{% endfor %}
+{% else %}
+Only one page
+{% endif %}
+</h2>
+{% endautoescape %}

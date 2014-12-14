@@ -11,18 +11,6 @@ handlers:
 - url: /image
   static_dir: image
 
-- url: /myimage/.*
-  script: py.image.app
-
-- url: /myquestion
-  script: py.question.app
-
-- url: /rss
-  script: py.rss.app
-
-- url: /rss/.*
-  script: py.rss.app
-
 - url: /question
   script: py.question.app
 

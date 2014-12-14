@@ -9,14 +9,13 @@ class Image(ndb.Model):
 
 	@classmethod
 	def get_img_all(cls, user):
-		target_img=Image.query(Image.img_user == user)
-		target_img.order(-Image.date)
+		target_img=Image.query(Image.img_user == user).order(-Image.date)
 		return target_img.fetch()
 
 	@classmethod
 	def get_img_one(cls, user, url):
-		target_img=Image.query(ndb.AND(Image.img_user == user, Image.img_url==url))
-		target_img.order(-Image.date)
+		target_img=Image.query(ndb.AND(Image.img_user == user, \
+			Image.img_url==url)).order(-Image.date)
 		return target_img.fetch()
 
 ####Question
@@ -26,27 +25,39 @@ class Question(ndb.Model):
 	q_title=ndb.StringProperty()
 	q_content=ndb.TextProperty(indexed=False) #???
 	q_tags=ndb.StringProperty(repeated=True) #???
-	create_time=ndb.DateTimeProperty(auto_now_add=True)
-	edit_time=ndb.DateTimeProperty(auto_now_add=True)
+	create_time=ndb.DateTimeProperty()
+	edit_time=ndb.DateTimeProperty()
 	vd_num=ndb.IntegerProperty()
 	vp_num=ndb.IntegerProperty()
 
+
+
 	@classmethod
-	def get_question_one(cls, quser, qid):
-		question=Question.query(ndb.AND(Question.q_user == quser, Question.q_id == qid))
+	def get_by_qid(cls, qid):
+		question=Question.query(Question.q_id == qid)
 		return question.fetch()
 
 	@classmethod
-	def get_questions_all(cls, quser):
-		question=Question.query(Question.q_user==quser)
-		question.order(Question.create_time)
+	def get_by_user_all(cls, quser):
+		question=Question.query(Question.q_user==quser).order(-Question.create_time)
 		return question.fetch()
 
 	@classmethod
-	def get_every_question(cls):
-		question=Question.query(Question.q_user!='')
-		question.order(Question.create_time)
+	def get_all(cls):
+		question=Question.query().order(-Question.create_time)
 		return question.fetch()
+
+	@classmethod
+	def get_by_tag(cls, tag):
+		question=Question.query(Question.q_tags.IN([tag])).order(-Question.create_time)
+		return question.fetch()
+
+	@classmethod
+	def get_by_tag_user(cls, tag, quser):
+		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), \
+			Question.q_user==quser)).order(-Question.create_time)
+		return question.fetch()
+
 
 class Vote(ndb.Model):
 	up_down=ndb.StringProperty()

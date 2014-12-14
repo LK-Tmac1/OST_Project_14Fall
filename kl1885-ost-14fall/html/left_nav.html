@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% autoescape true %}
+{% if current_user  %}
+<ul class="nav" align="center">
+     <li class="highlight">
+      <a href="/question/mine">My Questions</a>
+     </li>
+     <br>
+     <li class="highlight">
+      <a href="/myanswer">My Answers</a>
+     </li>
+     <br>
+     <li class="highlight">
+      <a href="/myvote">My Votes</a>
+     </li>
+     <br>
+     <li class="highlight">
+      <a href="/myimage">My Images</a>
+     </li>
+     <br>
+     <li class="highlight">
+      <a href="/rss/generate">RSS</a>
+     </li>
+     <br>
+     <li class="highlight">
+      <a href="{{login_out_url}}">Log out</a>
+     </li>
+    </ul>
+</div> 
+<!-- leftnav -->
+<div id="content">
+<p>Login as: {{ current_user }}</p>
+{% else %}
+<ul class="nav">
+     <li class="highlight">
+      <a bgcolor="grey" href="{{login_out_url}}" align="center">Login</a>
+     </li>
+     <br>
+
+</div> 
+<!-- leftnav -->
+<div id="content">
+<p>You are now a guest. Please login to create questions, answers and votes.</p>
+{% endif %}
+{% endautoescape %}
