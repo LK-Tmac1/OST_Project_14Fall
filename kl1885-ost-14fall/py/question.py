@@ -19,7 +19,7 @@ def vote_q(self):######
     newV.v_time=v_time
     newV.put()
 
-def show_question(self, mode_all):
+def show_question_list(self, mode_all):
     page_num = self.request.get('page')
     tag=unicode(self.request.get('tag'))
     current_user = users.get_current_user()
@@ -49,7 +49,7 @@ def show_question(self, mode_all):
             jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_MY_Q)
 
     if page_num and not str(page_num).isdigit():
-        jinjaprint.simple_message(self, jinjaprint.MESSAGE_INVALID_PAGE_NUM)
+        jinjaprint.return_message(self, jinjaprint.MESSAGE_INVALID_PAGE_NUM)
     else:
         if not str(page_num):
             page_num=1
@@ -72,9 +72,9 @@ def show_question(self, mode_all):
 def put_question(self, createnew):
     current_user = users.get_current_user()
     submit=self.request.get("submit")
-    if submit == "Cancel":
+    if submit.lower() == "cancel":
         self.redirect(jinjaprint.URL_QUESTION)
-    elif submit == "Submit":
+    elif submit.lower() == "submit":
         q_content=unicode(self.request.get("qcontent"))
         q_title=unicode(self.request.get("qtitle"))
         tag_string=unicode(self.request.get("qtags"))
@@ -82,9 +82,9 @@ def put_question(self, createnew):
         jinjaprint.left_nav(self)
 
         if utility.check_string_empty(q_title):
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_EMPTY_Q_TITLE)
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_TITLE)
         elif utility.check_string_empty(q_content):
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_EMPTY_Q_CONTENT)
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_CONTENT)
         else:
             if createnew:
                 newQ=Question()
@@ -99,14 +99,13 @@ def put_question(self, createnew):
                 newQ.vd_num=0
                 newQ.vp_num=0
                 newQ.put()
-                jinjaprint.simple_message(self,jinjaprint.MESSAGE_SUCCEED_NEW_Q)
+                templ_para={'link' : jinjaprint.URL_VIEW_Q+"?qid="+newQ.q_id}
+                jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_NEW_Q, templ_para)
             else:
                 qid=self.request.get('qid')
                 Qs=Question.get_by_qid(qid)
                 if len(Qs) == 0:
-                    jinjaprint.simple_message(self,jinjaprint.MESSAGE_NO_SUCH_QID+qid)
-                elif len(Qs) > 1:
-                    jinjaprint.simple_message(self,jinjaprint.MESSAGE_DUPLICATED_QID+qid)
+                    jinjaprint.return_message(self,jinjaprint.MESSAGE_NO_SUCH_QID+qid)
                 else:
                     editQ=Qs[0]
                     editQ.edit_time=datetime.datetime.now().replace(microsecond=0)
@@ -114,7 +113,8 @@ def put_question(self, createnew):
                     editQ.q_content=q_content
                     editQ.q_tags=utility.tag_split(tag_string)
                     editQ.put()
-                    jinjaprint.simple_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q)
+                    templ_para={'link' : jinjaprint.URL_VIEW_Q+"?qid="+q_id}                                        
+                    jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q, templ_para)
 
         jinjaprint.footer(self)
 
@@ -124,7 +124,7 @@ class CreateQuestion(webapp2.RequestHandler):
         jinjaprint.left_nav(self)
         current_user = users.get_current_user()
         if not current_user:
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
         else:
             jinjaprint.create_question(self)
 
@@ -141,15 +141,14 @@ class EditQuestion(webapp2.RequestHandler):
 
         current_user = users.get_current_user()
         if not current_user:
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
         else:
             qid=self.request.get("qid")
             Q=Question.get_by_qid(str(qid))
-
             if len(Q) == 0:
-                jinjaprint.simple_message(self, jinjaprint.MESSAGE_NO_SUCH_QID+qid)
+                jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_SUCH_QID+qid)
             elif str(Q[0].q_user) != str(current_user):
-                jinjaprint.simple_message(self, jinjaprint.MESSAGE_CANNOT_EDIT_Q)
+                jinjaprint.return_message(self, jinjaprint.MESSAGE_CANNOT_EDIT_Q)
             else:
                 tag_string=utility.merge_tags(Q[0].q_tags)
                 templ_para={'q':Q[0],'qtags': tag_string}
@@ -170,27 +169,43 @@ class ViewFullQuestion(webapp2.RequestHandler):
 
         qid=self.request.get("qid")
         Q=Question.get_by_qid(str(qid))
-        if len(Q) > 0:
+        
+        if len(Q) == 0:
+                jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_SUCH_QID+qid)
+        elif len(Q) == 1:
             q=Q[0]
-            qid=q.q_id
+            q.q_content=utility.replace_content(q.q_content)
+            templ_para={'q': q, 'tag_mode': jinjaprint.MODE_TAG_ALL_Q, 
+            'view_question_mode':True,
+            'current_user':current_user}
+            As = Answer.get_by_qid(str(qid))
+            jinjaprint.view_full_question(self, templ_para)
+            templ_para['As']=As
+            templ_para['current_user']=str(current_user)
+            jinjaprint.view_question_answer(self,templ_para)
         else:
-            q=None
+            jinjaprint.return_message(self,jinjaprint.MESSAGE_DUPLICATED_QID+qid)
 
-        q.q_content=utility.replace_content(q.q_content)
-        templ_para={'q': q, 'tag_mode': jinjaprint.MODE_TAG_ALL_Q, 'current_user':current_user}
-        #As = Answer.get_all_answer_by_qid()
-        jinjaprint.view_full_question(self, templ_para)
         jinjaprint.footer(self)
+
+    def post(self):
+        vote_q(self)
 
 
 class ListAllQuestion(webapp2.RequestHandler):
     def get(self):
-        show_question(self, True)
+        show_question_list(self, True)
+
+    def post(self):
+        vote_q(self)
 
 
 class ListMyQuestion(webapp2.RequestHandler):
     def get(self):
-        show_question(self, False)
+        show_question_list(self, False)
+
+    def post(self):
+        vote_q(self)
 
 
 app = webapp2.WSGIApplication([

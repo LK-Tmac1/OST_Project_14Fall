@@ -3,20 +3,25 @@
 {% if q %}
 <!-- Begin loops-->
 <div id="questionlist" class="drop-shadow raised">
+{% if view_question_mode %}
 {%  if q.q_tags|length > 0 %}
 {% for t in q.q_tags %}
 <a style="font-size:120%" 
-href="/question/tag?keyword={{ t }}&mode={{ tag_mode }}">
+href="/question/all?tag={{ t }}">
 #{{ t }}</a>
 &nbsp;&nbsp;
 {% endfor %}
 {% endif %}
+{% endif %}
+
 <p style="font-size:200%">{{ q.q_title }}</p>
 <p style="font-size:140%">{{ q.q_content | safe }}</p>
 {% if q.edit_time != None and q.edit_time != q.create_time %}
 <div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
 <div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
+{% if view_question_mode %}
+<div id="view_question_mode">
 <h3>
 {% if q.q_user|string() != current_user|string() %}
 <a href="/user/view?{{q.q_user}}">View this user</a>
@@ -34,6 +39,8 @@ href="/question/tag?keyword={{ t }}&mode={{ tag_mode }}">
 <input type='submit' value='Up' name='vote'  />
 <input type='submit' value='Down' name='vote' />
 </form>
+{% endif %}
+<!-- End viewquestionmode-->
 <!-- End loops-->
 {% else %}
 <div class="drop-shadow raised">

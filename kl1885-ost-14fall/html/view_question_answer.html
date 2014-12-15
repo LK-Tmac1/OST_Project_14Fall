@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% autoescape true %}
+
+{% if As|length >0 %}
+{% for a in As %}
+<div class="drop-shadow raised">
+<p style="font-size:140%">{{ a.a_content | safe }}</p>
+	<br>
+	<br>
+
+{% if a.edit_time != None and a.edit_time != a.create_time %}
+<div>----Edited by {{ a.a_user }} on  {{ a.edit_time }}</div>
+{% endif %}
+<div>----Created by {{ a.a_user }} on {{ a.create_time }}</div>
+{% if a.a_user|string() ==  current_user|string() %}
+<h3><a href="/question/answer/edit?aid={{ a.a_id }}">Edit your answer</a></h3>
+{% else %}
+<h3><a href="/user/view?{{a.a_user}}">View user</a></h3>
+{% endif %}
+<h4>{{ a.vp_num }} Up {{ a.vd_num }} Down</h4>
+<br>
+<form enctype="multipart/form-data" method="post">
+&nbsp;&nbsp;
+<input type='hidden' value="{{ a.a_id }}" name='aid'>
+<input type='submit' value='Up' name='vote'  />
+<input type='submit' value='Down' name='vote' />
+</form>
+</div>
+{% endfor %}
+{% else %}
+	<br>
+	<br>
+
+<div class="drop-shadow raised">
+	<br>
+<h2>No one answers this question yet, be the first one!</h2>
+	<br>
+
+</div>
+{% endif %}
+{% endautoescape %}

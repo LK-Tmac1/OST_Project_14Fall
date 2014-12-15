@@ -44,13 +44,13 @@ This question belongs to you.
 {% endif %}
 {% endif %}
 <h4>{{ q.vp_num }} Up {{ q.vd_num }} Down</h4>
-</div>
 <form enctype="multipart/form-data" method="post">
 &nbsp;&nbsp;
 <input type='hidden' value="{{ q.q_id }}" name='qid'>
 <input type='submit' value='Up' name='vote'  />
 <input type='submit' value='Down' name='vote' />
 </form>
+</div>
 {% endfor %}
 {% else %}
 <div class="drop-shadow raised">

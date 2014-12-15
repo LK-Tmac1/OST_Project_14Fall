@@ -10,9 +10,9 @@ class HomePage(webapp2.RequestHandler):
         jinjaprint.left_nav(self)
         jinjaprint.view_top_link(self)
         if current_user:
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_WELCOME_BACK+str(current_user))
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_WELCOME_BACK+str(current_user))
         else:
-            jinjaprint.simple_message(self, jinjaprint.MESSAGE_HELLO_GUEST)
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_HELLO_GUEST)
         jinjaprint.footer(self)
 
 

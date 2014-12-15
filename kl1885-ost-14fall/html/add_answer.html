@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<!-- content -->
+<div id="answerform" class="drop-shadow raised">
+<form enctype="multipart/form-data" method="post">
+<br><br>
+  <div >
+  <textarea rows='12' cols='90' name='acontent' style="font-size:140%"></textarea><br><br>
+<br>
+</div>
+<input type='hidden' value="{{ q.q_id }}" name='qid'>
+<input type='hidden' value="{{ q.q_title }}" name='qtitle'>
+<input type='submit' value='Submit' name='submit'  />
+<input type='submit' value='Cancel' name='submit' />
+</form>
+</div>
+{% endautoescape %}
