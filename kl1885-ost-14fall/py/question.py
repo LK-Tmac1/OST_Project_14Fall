@@ -67,6 +67,8 @@ def show_question_list(self, mode_all):
         jinjaprint.show_question_list(self, templ_para)
         if len(Qs) != 0:
             jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
+        
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
 def put_question(self, createnew):
@@ -116,6 +118,7 @@ def put_question(self, createnew):
                     templ_para={'link' : jinjaprint.URL_VIEW_Q+"?qid="+q_id}                                        
                     jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q, templ_para)
 
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
 class CreateQuestion(webapp2.RequestHandler):
@@ -128,6 +131,7 @@ class CreateQuestion(webapp2.RequestHandler):
         else:
             jinjaprint.create_question(self)
 
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
     def post(self):
@@ -153,6 +157,7 @@ class EditQuestion(webapp2.RequestHandler):
                 tag_string=utility.merge_tags(Q[0].q_tags)
                 templ_para={'q':Q[0],'qtags': tag_string}
                 jinjaprint.edit_question(self, templ_para)
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
     def post(self):
@@ -185,7 +190,7 @@ class ViewFullQuestion(webapp2.RequestHandler):
             jinjaprint.view_question_answer(self,templ_para)
         else:
             jinjaprint.return_message(self,jinjaprint.MESSAGE_DUPLICATED_QID+qid)
-
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
     def post(self):

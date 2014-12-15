@@ -12,14 +12,39 @@ indexes:
 
 - kind: Answer
   properties:
+  - name: a_user
+  - name: edit_time
+    direction: desc
+
+- kind: Answer
+  properties:
+  - name: a_user
+  - name: q_id
+  - name: edit_time
+    direction: desc
+
+- kind: Answer
+  properties:
   - name: q_id
   - name: create_time
     direction: desc
 
+- kind: Answer
+  properties:
+  - name: q_id
+  - name: edit_time
+    direction: desc
+
 - kind: Question
   properties:
   - name: q_tags
   - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_tags
+  - name: edit_time
     direction: desc
 
 - kind: Question
@@ -33,6 +58,12 @@ indexes:
   properties:
   - name: q_user
   - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_user
+  - name: edit_time
     direction: desc
 
 - kind: Question

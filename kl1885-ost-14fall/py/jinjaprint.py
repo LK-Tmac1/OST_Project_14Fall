@@ -12,6 +12,7 @@ URL_VIEW_Q=URL_QUESTION+'/view'
 URL_EDIT_Q=URL_QUESTION+'/edit'
 URL_TAG_Q=URL_QUESTION+'/tag'
 URL_ANSWER=URL_QUESTION+'/answer'
+URL_ANSWER_LIST=URL_ANSWER+"/list"
 URL_ANSWER_ADD=URL_ANSWER+'/add'
 URL_ANSWER_EDIT=URL_ANSWER+'/edit'
 URL_ANSWER_DELETE=URL_ANSWER+'/delete'
@@ -23,6 +24,8 @@ TITLE_MY_Q="My Question"
 TITLE_TAG_Q='Tag question'
 TITLE_ADD_A="Add answer"
 TITLE_EDIT_A="Edit answer"
+TITLE_LIST_OTHER_A="See other's answers"
+TITLE_LIST_MY_A="See my answers"
 MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
 HEADER_VIEW_ALL_Q='View all existed questions: '
@@ -32,8 +35,12 @@ HEADER_VIEW_TAG_Q_ALL="All questions with tag: "
 HEADER_VIEW_TAG_Q_MINE="My Questions that with tag: "
 HEADER_ADD_A="Add a answer to this question: "
 HEADER_EDIT_A="Edit this answer: "
+HEADER_LIST_A="View all answers here: "
+HEADER_LIST_A_OTHER="View all the answers for this user: "
+HEADER_LIST_A_MY="View all my answers: "
 TEMP_LEFT_NAV='left_nav.html'
 TEMP_HEADER='header.html'
+TEMP_CONTENT_END='content_end.html'
 TEMP_FOOTER='footer.html'
 TEMP_CREATE_Q='create_question.html'
 TEMP_EDIT_Q='edit_question.html'
@@ -63,6 +70,8 @@ MESSAGE_NO_SUCH_AID="Sorry, no answer for this id: "
 MESSAGE_LOGIN_FIRST="You are now a guest so please login first."
 MESSAGE_EMPTY_A_CONTENT="Give some real stuff please..."
 MESSAGE_NO_Q_FOR_AID="So questions for answer of id: "
+MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
+MESSAGE_NO_A_FOR_MINE="Sorry there is no answer by this user: "
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)
@@ -73,6 +82,9 @@ def header(self, title):
 
 def footer(self):
     self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_FOOTER).render())
+	
+def content_end(self):
+    self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_CONTENT_END).render())
 
 def view_top_link(self):
     self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_VIEW_TOP_LINK).render())

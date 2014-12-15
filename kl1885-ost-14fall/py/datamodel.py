@@ -38,23 +38,23 @@ class Question(ndb.Model):
 	@classmethod
 	def get_by_user_all(cls, quser):
 		question=Question.query(Question.q_user==quser).\
-		order(-Question.edit_time).order(-Question.create_time)
+		order(-Question.edit_time).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_all(cls):
-		question=Question.query().order(-Question.create_time)
+		question=Question.query().order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag(cls, tag):
-		question=Question.query(Question.q_tags.IN([tag])).order(-Question.create_time)
+		question=Question.query(Question.q_tags.IN([tag])).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag_user(cls, tag, quser):
 		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), \
-			Question.q_user==quser)).order(-Question.create_time)
+			Question.q_user==quser)).order(-Question.edit_time)
 		return question.fetch()
 
 class Answer(ndb.Model):
@@ -68,13 +68,24 @@ class Answer(ndb.Model):
 	vd_num=ndb.IntegerProperty()
 
 	@classmethod
+	def get_by_user_qid(cls, auser, qid):
+		answer=Answer.query(ndb.AND(Answer.q_id==qid, Answer.a_user==auser) \
+			).order(-Answer.edit_time)
+		return answer.fetch()
+
+	@classmethod
 	def get_by_qid(cls, qid):
-		answer=Answer.query(Answer.q_id==qid).order(-Answer.create_time)
+		answer=Answer.query(Answer.q_id==qid).order(-Answer.edit_time)
 		return answer.fetch()
 	
 	@classmethod
 	def get_by_aid(cls, aid):
 		answer=Answer.query(Answer.a_id==aid)
+		return answer.fetch()
+
+	@classmethod
+	def get_by_auser(cls, auser):
+		answer=Answer.query(Answer.a_user==str(auser)).order(-Answer.edit_time)
 		return answer.fetch()
 
 

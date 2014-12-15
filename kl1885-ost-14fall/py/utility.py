@@ -3,6 +3,9 @@ import os, urllib, datetime, jinja2, math, re, time, py.datamodel as model
 PAGE_LIMIT=10
 DEFAULT_DELIMIT=","
 
+def remove_duplicate_ordered(list_input):
+	return sorted(set(list_input))
+
 def replace_image_html(content):
 	newstring = re.sub(r'(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)', r'<a href="\1">\1</a>', content)
 	content = re.sub(r'<a href="(\http[s]?://[^\s<>"]+|www\.[^\s<>"]+)">[^\s]+.jpg</a>', r'<img src="\1">', newstring)

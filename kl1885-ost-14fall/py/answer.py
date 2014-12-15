@@ -45,7 +45,7 @@ def put_answer(self, add_new):
 					templ_para={'link': jinjaprint.URL_VIEW_Q+"?qid="+editA.q_id}
 					message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_EDIT_A)
 					jinjaprint.return_message(self, message, templ_para)
-
+		jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
 
@@ -70,6 +70,7 @@ class AddAnswer(webapp2.RequestHandler):
 				templ_para={'q': q, 'view_question_mode':False}
 				jinjaprint.view_full_question(self, templ_para)
 				jinjaprint.add_answer(self, templ_para)
+		jinjaprint.content_end(self)
 		jinjaprint.footer(self)
 
 	def post(self):
@@ -101,15 +102,62 @@ class EditAnswer(webapp2.RequestHandler):
 				templ_para={'a': a, 'q': Q[0]}
 				jinjaprint.view_full_question(self, templ_para)
 				jinjaprint.edit_answer(self, templ_para)
-		
+		jinjaprint.content_end(self)
 		jinjaprint.footer(self)
 
 	def post(self):
 		put_answer(self, False)
-		
+	
+
+class ListUserAnswer(webapp2.RequestHandler):
+	def get(self):
+		current_user=users.get_current_user()
+		user=str(self.request.get("user"))
+		mine_mode = current_user and str(current_user) == user
+		if mine_mode:
+			jinjaprint.header(self, jinjaprint.TITLE_LIST_MY_A)
+			jinjaprint.left_nav(self)
+			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_MY)
+
+		else:
+			jinjaprint.header(self, jinjaprint.TITLE_LIST_OTHER_A)
+			jinjaprint.left_nav(self)
+			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_OTHER+user)
+
+		jinjaprint.view_top_link(self)
+		As=Answer.get_by_auser(user)
+		print "As", As
+		if len(As) == 0:
+			if mine_mode:
+				jinjaprint.return_message(self, MESSAGE_NO_A_FOR_ME)
+			else:
+				jinjaprint.return_message(self, MESSAGE_NO_A_FOR_OTHER)
+		else:
+			relatedQs=[]
+			templ_para={}
+			for a in As:
+				Qs=Question.get_by_qid(a.q_id)
+				if Qs[0] not in relatedQs:
+					relatedQs.append(Qs[0])
+			for q in relatedQs:
+				templ_para={"q": q, "view_my_question" : mine_mode, 
+				'view_question_mode': True}
+				if mine_mode:
+					templ_para["tag_mode"]="mine"
+				else:
+					templ_para["tag_mode"]="all"
+				jinjaprint.view_full_question(self, templ_para)
+				userAs = Answer.get_by_user_qid(user, q.q_id)
+				templ_para["As"]=userAs
+				jinjaprint.view_question_answer(self, templ_para)
+				jinjaprint.content_end(self)
+
+		jinjaprint.footer(self)
+
 
 app = webapp2.WSGIApplication([
      (jinjaprint.URL_ANSWER, AddAnswer)
      ,(jinjaprint.URL_ANSWER_ADD, AddAnswer)
     ,(jinjaprint.URL_ANSWER_EDIT, EditAnswer)
+    ,(jinjaprint.URL_ANSWER_LIST+".*", ListUserAnswer)
 ], debug=True)

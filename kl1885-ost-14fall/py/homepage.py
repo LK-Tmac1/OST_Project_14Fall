@@ -13,6 +13,8 @@ class HomePage(webapp2.RequestHandler):
             jinjaprint.return_message(self, jinjaprint.MESSAGE_WELCOME_BACK+str(current_user))
         else:
             jinjaprint.return_message(self, jinjaprint.MESSAGE_HELLO_GUEST)
+        
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
 
