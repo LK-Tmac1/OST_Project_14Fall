@@ -36,7 +36,7 @@ class Question(ndb.Model):
 		return question.fetch()
 
 	@classmethod
-	def get_by_user_all(cls, quser):
+	def get_by_user(cls, quser):
 		question=Question.query(Question.q_user==quser).\
 		order(-Question.edit_time).order(-Question.edit_time)
 		return question.fetch()
@@ -52,9 +52,13 @@ class Question(ndb.Model):
 		return question.fetch()
 
 	@classmethod
-	def get_by_tag_user(cls, tag, quser):
-		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), \
-			Question.q_user==quser)).order(-Question.edit_time)
+	def get_by_tag_user(cls, tag, user):
+		question=Question.query(ndb.AND(Question.q_tags.IN[tag], Question.q_user==user)).order(-Question.edit_time)
+		return question.fetch()
+
+	@classmethod
+	def get_by_tag_user(cls, tag, user):
+		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.edit_time)
 		return question.fetch()
 
 class Answer(ndb.Model):

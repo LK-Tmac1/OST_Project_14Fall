@@ -3,7 +3,7 @@
 {% if current_user  %}
 <ul class="nav" align="center">
      <li class="highlight">
-      <a href="/question/mine">My Questions</a>
+      <a href="/question/list?user={{ current_user | string() }}">My Questions</a>
      </li>
      <br>
      <li class="highlight">

@@ -8,7 +8,7 @@
 {%  if q.q_tags|length >0 %}
 {% for t in q.q_tags %}
 <a style="font-size:120%" 
-href="/question/{{ tag_mode }}?tag={{ t }}">#{{ t }}</a>
+href="/question/list?tag={{ t }}">#{{ t }}</a>
 &nbsp;&nbsp;
 {% endfor %}
 {% endif %}
@@ -23,32 +23,24 @@ href="/question/{{ tag_mode }}?tag={{ t }}">#{{ t }}</a>
 <div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
 <div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
-<h3><a href="/question/view?qid={{ q.q_id }}">View</a>
-&nbsp;&nbsp;
-{% if view_my_question %}
-<a href="/question/edit?qid={{ q.q_id }}">Edit</a>
-&nbsp;&nbsp;
+
+<h3><a href="/question/view?qid={{ q.q_id }}">View</a>&nbsp;&nbsp;
 <a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>
-</h3>
-{% endif %}
-{% if not view_my_question %}
-{% if q.q_user|string() != current_user|string() %}
-<a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>&nbsp;&nbsp;
-<a href="/user/view?{{q.q_user}}">View user</a>
-</h3>
-{% else %}
-<a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>
-&nbsp;&nbsp;
+{% if q.q_user | string() == current_user | string() %}
+&nbsp;&nbsp;<a href="/question/edit?qid={{ q.q_id }}">Edit</a>&nbsp;&nbsp;
+{% if not list_my_question_mode %}
 This question belongs to you.
+{% endif %}
+{% else %}
+&nbsp;&nbsp;<a href="/user/view?{{q.q_user}}">View this user</a>&nbsp;&nbsp;
+{% endif %}
 </h3>
-{% endif %}
-{% endif %}
-<h4>{{ q.vp_num }} Up {{ q.vd_num }} Down</h4>
+
+<h4>{{ q.vp_num }} Up &nbsp;&nbsp;&nbsp; {{ q.vd_num }} Down</h4>
 <form enctype="multipart/form-data" method="post">
-&nbsp;&nbsp;
 <input type='hidden' value="{{ q.q_id }}" name='qid'>
 <input type='submit' value='Up' name='vote'  />
-<input type='submit' value='Down' name='vote' />
+&nbsp;&nbsp;<input type='submit' value='Down' name='vote' />
 </form>
 </div>
 {% endfor %}

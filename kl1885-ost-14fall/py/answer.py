@@ -9,7 +9,7 @@ def put_answer(self, add_new):
 	qtitle=unicode(self.request.get('qtitle'))
 	submit=self.request.get("submit")
 	if submit.lower()=="cancel":
-		self.redirect(jinjaprint.URL_VIEW_Q+"?qid="+qid)
+		self.redirect(jinjaprint.URL_QUESTION_LIST+"?qid="+qid)
 	elif submit.lower() == "submit":
 		a_content=unicode(self.request.get("acontent"))
 		jinjaprint.header(self,jinjaprint.TITLE_ADD_A)
@@ -30,7 +30,7 @@ def put_answer(self, add_new):
 				newA.vd_num=0
 				newA.vp_num=0
 				newA.put()
-				templ_para={'link': jinjaprint.URL_VIEW_Q+"?qid="+str(qid)}
+				templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+str(qid)}
 				message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_NEW_A+"\n\n\n"+qtitle)
 				jinjaprint.return_message(self, message, templ_para)
 			else:
@@ -42,7 +42,7 @@ def put_answer(self, add_new):
 					editA.a_content=unicode(self.request.get("acontent"))
 					editA.edit_time=datetime.datetime.now().replace(microsecond=0)
 					editA.put()
-					templ_para={'link': jinjaprint.URL_VIEW_Q+"?qid="+editA.q_id}
+					templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+editA.q_id}
 					message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_EDIT_A)
 					jinjaprint.return_message(self, message, templ_para)
 		jinjaprint.content_end(self)
@@ -67,7 +67,7 @@ class AddAnswer(webapp2.RequestHandler):
 			else:
 				q=Q[0]
 				q.q_content=utility.replace_content(q.q_content)
-				templ_para={'q': q, 'view_question_mode':False}
+				templ_para={'q': q, 'answer_mode':True}
 				jinjaprint.view_full_question(self, templ_para)
 				jinjaprint.add_answer(self, templ_para)
 		jinjaprint.content_end(self)
@@ -99,7 +99,7 @@ class EditAnswer(webapp2.RequestHandler):
 			else:
 				a=A[0]
 				a.a_content=utility.replace_content(a.a_content)
-				templ_para={'a': a, 'q': Q[0]}
+				templ_para={'a': a, 'q': Q[0], "answer_mode":True}
 				jinjaprint.view_full_question(self, templ_para)
 				jinjaprint.edit_answer(self, templ_para)
 		jinjaprint.content_end(self)
@@ -117,21 +117,20 @@ class ListUserAnswer(webapp2.RequestHandler):
 		if mine_mode:
 			jinjaprint.header(self, jinjaprint.TITLE_LIST_MY_A)
 			jinjaprint.left_nav(self)
+			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_MY)
-
 		else:
 			jinjaprint.header(self, jinjaprint.TITLE_LIST_OTHER_A)
 			jinjaprint.left_nav(self)
+			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_OTHER+user)
 
-		jinjaprint.view_top_link(self)
 		As=Answer.get_by_auser(user)
-		print "As", As
 		if len(As) == 0:
 			if mine_mode:
-				jinjaprint.return_message(self, MESSAGE_NO_A_FOR_ME)
+				jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_A_FOR_MINE)
 			else:
-				jinjaprint.return_message(self, MESSAGE_NO_A_FOR_OTHER)
+				jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_A_FOR_OTHER+user)
 		else:
 			relatedQs=[]
 			templ_para={}
@@ -142,10 +141,6 @@ class ListUserAnswer(webapp2.RequestHandler):
 			for q in relatedQs:
 				templ_para={"q": q, "view_my_question" : mine_mode, 
 				'view_question_mode': True}
-				if mine_mode:
-					templ_para["tag_mode"]="mine"
-				else:
-					templ_para["tag_mode"]="all"
 				jinjaprint.view_full_question(self, templ_para)
 				userAs = Answer.get_by_user_qid(user, q.q_id)
 				templ_para["As"]=userAs

@@ -19,57 +19,7 @@ def vote_q(self):######
     newV.v_time=v_time
     newV.put()
 
-def show_question_list(self, mode_all):
-    page_num = self.request.get('page')
-    tag=unicode(self.request.get('tag'))
-    current_user = users.get_current_user()
-    templ_para={"current_user":unicode(current_user)}
-    max_page_num=0
-    jinjaprint.header(self,jinjaprint.TITLE_HOME)
-    jinjaprint.left_nav(self)
-    jinjaprint.view_top_link(self)
-    Qs=[]
-    if mode_all:
-        templ_para['view_my_question']=False
-        templ_para['tag_mode']= jinjaprint.MODE_TAG_ALL_Q
-        if tag:
-            Qs=Question.get_by_tag(tag)
-            jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_TAG_Q_ALL+tag)
-        else:
-            Qs=Question.get_all()
-            jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_ALL_Q)
-    else:
-        templ_para['view_my_question']=True
-        templ_para['tag_mode']= jinjaprint.MODE_TAG_MY_Q
-        if tag:
-            Qs=Question.get_by_tag_user(tag,str(current_user))
-            jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_TAG_Q_MINE+tag)
-        else:
-            Qs=Question.get_by_user_all(unicode(current_user))
-            jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_MY_Q)
 
-    if page_num and not str(page_num).isdigit():
-        jinjaprint.return_message(self, jinjaprint.MESSAGE_INVALID_PAGE_NUM)
-    else:
-        if not str(page_num):
-            page_num=1
-        else:
-            page_num=int(page_num)
-
-        max_page_num=utility.max_page_num(len(Qs))
-        Qs=utility.split_element_by_page_num(Qs,page_num)
-        for q in Qs:
-            q.q_content=utility.replace_content(q.q_content)
-            
-        if len(Qs) != 0:
-            jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
-        templ_para['Qs']=Qs
-        jinjaprint.show_question_list(self, templ_para)
-        if len(Qs) != 0:
-            jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
-        
-        jinjaprint.content_end(self)
-        jinjaprint.footer(self)
 
 def put_question(self, createnew):
     current_user = users.get_current_user()
@@ -101,7 +51,7 @@ def put_question(self, createnew):
                 newQ.vd_num=0
                 newQ.vp_num=0
                 newQ.put()
-                templ_para={'link' : jinjaprint.URL_VIEW_Q+"?qid="+newQ.q_id}
+                templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+newQ.q_id}
                 jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_NEW_Q, templ_para)
             else:
                 qid=self.request.get('qid')
@@ -115,7 +65,7 @@ def put_question(self, createnew):
                     editQ.q_content=q_content
                     editQ.q_tags=utility.tag_split(tag_string)
                     editQ.put()
-                    templ_para={'link' : jinjaprint.URL_VIEW_Q+"?qid="+q_id}                                        
+                    templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+editQ.q_id}                                        
                     jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q, templ_para)
 
         jinjaprint.content_end(self)
@@ -177,19 +127,19 @@ class ViewFullQuestion(webapp2.RequestHandler):
         
         if len(Q) == 0:
                 jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_SUCH_QID+qid)
-        elif len(Q) == 1:
+        else:
             q=Q[0]
             q.q_content=utility.replace_content(q.q_content)
             templ_para={'q': q, 'tag_mode': jinjaprint.MODE_TAG_ALL_Q, 
             'view_question_mode':True,
             'current_user':current_user}
             As = Answer.get_by_qid(str(qid))
+            for a in As:
+                a.a_content=utility.replace_content(a.a_content)
             jinjaprint.view_full_question(self, templ_para)
             templ_para['As']=As
             templ_para['current_user']=str(current_user)
             jinjaprint.view_question_answer(self,templ_para)
-        else:
-            jinjaprint.return_message(self,jinjaprint.MESSAGE_DUPLICATED_QID+qid)
         jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
@@ -197,27 +147,74 @@ class ViewFullQuestion(webapp2.RequestHandler):
         vote_q(self)
 
 
-class ListAllQuestion(webapp2.RequestHandler):
+class ListQuestion(webapp2.RequestHandler):
     def get(self):
-        show_question_list(self, True)
+        page_num = self.request.get('page')
+        tag=unicode(self.request.get('tag'))
+        user=self.request.get("user")
+        current_user = users.get_current_user()
+        templ_para={"current_user":str(current_user)}
+        max_page_num=0
+        Qs=[]
+        mine_mode = str(current_user) == str(user)
 
-    def post(self):
-        vote_q(self)
+        jinjaprint.header(self,jinjaprint.TITLE_HOME)
+        jinjaprint.left_nav(self)
+        jinjaprint.view_top_link(self)
+        if user:
+            if tag:
+                Qs=Question.get_by_tag_user(tag, user)
+                if mine_mode:
+                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_TAG_Q_MINE+tag)
+                    templ_para['list_my_question_mode']=True                    
+                else:
+                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_Q+user+" with tag: "+tag)
+            else:
+                Qs=Question.get_by_user(user)
+                if mine_mode:
+                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_Q)
+                    templ_para['list_my_question_mode']=True                    
+                else:
+                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_Q+user)
+        else:
+            if tag:
+                Qs=Question.get_by_tag(tag)
+                jinjaprint.view_header(self, jinjaprint.HEADER_LIST_TAG_Q_ALL+tag)
+            else:
+                Qs=Question.get_all()
+                jinjaprint.view_header(self, jinjaprint.HEADER_LIST_ALL_Q)
 
+        if page_num and not str(page_num).isdigit():
+            jinjaprint.return_message(self, jinjaprint.MESSAGE_INVALID_PAGE_NUM)
+        else:
+            if not str(page_num):
+                page_num=1
+            else:
+                page_num=int(page_num)
 
-class ListMyQuestion(webapp2.RequestHandler):
-    def get(self):
-        show_question_list(self, False)
+            max_page_num=utility.max_page_num(len(Qs))
+            Qs=utility.split_element_by_page_num(Qs,page_num)
+            for q in Qs:
+                q.q_content=utility.replace_content(q.q_content)
+                
+            if len(Qs) != 0:
+                jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
+            templ_para['Qs']=Qs
+            jinjaprint.list_question(self, templ_para)
+            if len(Qs) != 0:
+                jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
+            
+            jinjaprint.content_end(self)
+            jinjaprint.footer(self)
 
     def post(self):
         vote_q(self)
 
 
 app = webapp2.WSGIApplication([
-     (jinjaprint.URL_QUESTION, ListAllQuestion)
-     ,(jinjaprint.URL_SHOW_ALL_Q, ListAllQuestion)
-    ,(jinjaprint.URL_SHOW_MY_Q, ListMyQuestion)
-    ,(jinjaprint.URL_CREATE_Q, CreateQuestion)
-    ,(jinjaprint.URL_VIEW_Q, ViewFullQuestion)
-    ,(jinjaprint.URL_EDIT_Q, EditQuestion)
+     (jinjaprint.URL_QUESTION, ListQuestion)
+    ,(jinjaprint.URL_QUESTION_LIST, ListQuestion)
+    ,(jinjaprint.URL_QUESTION_CREATE, CreateQuestion)
+    ,(jinjaprint.URL_QUESTION_VIEW, ViewFullQuestion)
+    ,(jinjaprint.URL_QUESTION_EDIT, EditQuestion)
 ], debug=True)

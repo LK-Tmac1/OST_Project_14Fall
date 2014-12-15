@@ -5,12 +5,10 @@ URL_HOME='/homepage'
 URL_LOGIN='/login'
 URL_LOGOUT='/logout'
 URL_QUESTION='/question'
-URL_SHOW_ALL_Q=URL_QUESTION+'/all'
-URL_SHOW_MY_Q=URL_QUESTION+'/mine'
-URL_CREATE_Q=URL_QUESTION+'/create'
-URL_VIEW_Q=URL_QUESTION+'/view'
-URL_EDIT_Q=URL_QUESTION+'/edit'
-URL_TAG_Q=URL_QUESTION+'/tag'
+URL_QUESTION_LIST=URL_QUESTION+'/list'
+URL_QUESTION_CREATE=URL_QUESTION+'/create'
+URL_QUESTION_VIEW=URL_QUESTION+'/view'
+URL_QUESTION_EDIT=URL_QUESTION+'/edit'
 URL_ANSWER=URL_QUESTION+'/answer'
 URL_ANSWER_LIST=URL_ANSWER+"/list"
 URL_ANSWER_ADD=URL_ANSWER+'/add'
@@ -28,11 +26,12 @@ TITLE_LIST_OTHER_A="See other's answers"
 TITLE_LIST_MY_A="See my answers"
 MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
-HEADER_VIEW_ALL_Q='View all existed questions: '
 HEADER_VIEW_Q='View the full question: '
-HEADER_VIEW_MY_Q='View my questions: '
-HEADER_VIEW_TAG_Q_ALL="All questions with tag: "
-HEADER_VIEW_TAG_Q_MINE="My Questions that with tag: "
+HEADER_LIST_ALL_Q='List all existed questions: '
+HEADER_LIST_MY_Q='List my questions: '
+HEADER_LIST_OTHER_Q='List questions of user: '
+HEADER_LIST_TAG_Q_ALL="List all questions with tag: "
+HEADER_LIST_TAG_Q_MINE="List all my questions that with tag: "
 HEADER_ADD_A="Add a answer to this question: "
 HEADER_EDIT_A="Edit this answer: "
 HEADER_LIST_A="View all answers here: "
@@ -46,7 +45,7 @@ TEMP_CREATE_Q='create_question.html'
 TEMP_EDIT_Q='edit_question.html'
 TEMP_VIEW_TOP_LINK='view_top_link.html'
 TEMP_VIEW_HEADER='view_header.html'
-TEMP_VIEW_Q_LIST='show_question_list.html'
+TEMP_VIEW_Q_LIST='list_question.html'
 TEMP_VIEW_Q='view_full_question.html'
 TEMP_ADD_ANSWER='add_answer.html'
 TEMP_EDIT_ANSWER='edit_answer.html'
@@ -71,7 +70,7 @@ MESSAGE_LOGIN_FIRST="You are now a guest so please login first."
 MESSAGE_EMPTY_A_CONTENT="Give some real stuff please..."
 MESSAGE_NO_Q_FOR_AID="So questions for answer of id: "
 MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
-MESSAGE_NO_A_FOR_MINE="Sorry there is no answer by this user: "
+MESSAGE_NO_A_FOR_MINE="Sorry you do not have answers to any others' question."
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)
@@ -114,7 +113,7 @@ def view_header(self, header):
 	templ_para={'view_header': header}
 	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_VIEW_HEADER).render(templ_para))
 
-def show_question_list(self, templ_para):
+def list_question(self, templ_para):
     self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_VIEW_Q_LIST).render(templ_para))
 
 def view_question_answer(self, templ_para):
