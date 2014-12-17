@@ -11,6 +11,12 @@ handlers:
 - url: /image
   static_dir: image
 
+- url: /vote
+  script: py.vote.app
+
+- url: /vote.*
+  script: py.vote.app
+
 - url: /question
   script: py.question.app
 

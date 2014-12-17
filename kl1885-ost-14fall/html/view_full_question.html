@@ -14,9 +14,17 @@
 <br>
 <br>
 {% if q.edit_time != None and q.edit_time != q.create_time %}
+{% if q.q_user|string() == current_user|string() %}
+<div>----Edited by You on  {{ q.edit_time }}</div>
+{% else %}
 <div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
-<div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
+{% endif %}
+{% if q.q_user|string() == current_user|string() %}
+<div>----Asked by You on {{ q.create_time }}</div>
+{% else %}
+<div>----Asked by {{ q.q_user }} on {{ q.create_time }}</div>
+{% endif %}
 <br>
 <br>
 <h3>

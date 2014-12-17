@@ -1,7 +1,9 @@
 import webapp2, datetime, time, py.homepage as homepage, py.jinjaprint as jinjaprint, py.utility as utility
 from py.datamodel import *
+import py.vote as vote
 from google.appengine.api import users
 from google.appengine.ext import ndb
+
 
 def put_answer(self, add_new):
 	current_user=users.get_current_user()
@@ -148,6 +150,9 @@ class ListUserAnswer(webapp2.RequestHandler):
 				jinjaprint.content_end(self)
 
 		jinjaprint.footer(self)
+
+	def put(self):
+		vote.vote(self)
 
 
 app = webapp2.WSGIApplication([

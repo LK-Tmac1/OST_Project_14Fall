@@ -3,6 +3,7 @@ import os, urllib, datetime, jinja2, math, re, time, py.datamodel as model
 PAGE_LIMIT=10
 DEFAULT_DELIMIT=","
 
+
 def remove_duplicate_ordered(list_input):
 	return sorted(set(list_input))
 

@@ -9,14 +9,29 @@
 	<br>
 
 {% if a.edit_time != None and a.edit_time != a.create_time %}
+{% if a.a_user|string() ==  current_user|string() %}
+<div>----Edited by You on  {{ a.edit_time }}</div>
+{% else %}
 <div>----Edited by {{ a.a_user }} on  {{ a.edit_time }}</div>
 {% endif %}
-<div>----Created by {{ a.a_user }} on {{ a.create_time }}</div>
+{% endif %}
+
 {% if a.a_user|string() ==  current_user|string() %}
-<h3><a href="/question/answer/edit?aid={{ a.a_id }}">Edit your answer</a></h3>
+<div>----Answered by You on  {{ a.edit_time }}</div>
+{% else %}
+<div>----Answered by {{ a.a_user }} on {{ a.create_time }}</div>
+{% endif %}
+
+
+
+
+{% if a.a_user|string() ==  current_user|string() %}
+<h3><a href="/question/answer/edit?aid={{ a.a_id }}">Edit answer</a></h3>
 {% else %}
 <h3><a href="/user/view?{{a.a_user}}">View this user</a></h3>
 {% endif %}
+
+
 <h4>{{ a.vp_num }} Up {{ a.vd_num }} Down</h4>
 <br>
 <form enctype="multipart/form-data" method="post">
@@ -27,6 +42,7 @@
 </form>
 </div>
 {% endfor %}
+
 {% else %}
 	<br>
 	<br>

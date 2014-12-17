@@ -61,6 +61,7 @@ class Question(ndb.Model):
 		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.edit_time)
 		return question.fetch()
 
+####Answer
 class Answer(ndb.Model):
 	a_user=ndb.StringProperty()
 	a_id=ndb.StringProperty()
@@ -92,7 +93,7 @@ class Answer(ndb.Model):
 		answer=Answer.query(Answer.a_user==str(auser)).order(-Answer.edit_time)
 		return answer.fetch()
 
-
+####Vote
 class Vote(ndb.Model):
 	up_down=ndb.StringProperty()
 	q_id=ndb.StringProperty()
@@ -101,18 +102,43 @@ class Vote(ndb.Model):
 	v_time=ndb.DateTimeProperty()	
 
 	@classmethod
-	def get_user_vote(cls, user):
-		vote=Vote.query(Vote.q_user==user)
+	def get_all_vote(cls):
+		vote=Vote.query().order(-Vote.v_time)
+		return vote.fetch()
+
+	@classmethod
+	def get_user_all_vote(cls, user):
+		vote=Vote.query(Vote.v_user==user).order(-Vote.v_time)
+		return vote.fetch()
+	
+	@classmethod
+	def get_q_all_vote(cls):
+		vote=Vote.query(Vote.aid==None).order(-Vote.v_time)
+		return vote.fetch()
+
+	@classmethod
+	def get_a_all_vote(cls):
+		vote=Vote.query(Vote.qid==None).order(-Vote.v_time)
 		return vote.fetch()
 
 	@classmethod
 	def get_user_vote_q(cls, user, qid):
-		vote=Vote.query(ndb.AND(Vote.q_user==user, Vote.q_id==qid))
+		vote=Vote.query(ndb.AND(Vote.v_user==user, Vote.q_id==qid)).order(-Vote.v_time)
 		return vote.fetch()
 
 	@classmethod
-	def get_user_vote_a(cls, user, qid, aid):
-		vote=Vote.query(ndb.AND(Vote.q_user==user, Vote.q_id==qid, Vote.a_id==aid))
+	def get_user_vote_a(cls, user, aid):
+		vote=Vote.query(ndb.AND(Vote.v_user==user, Vote.a_id==aid)).order(-Vote.v_time)
+		return vote.fetch()
+
+	@classmethod
+	def get_user_vote_all_q(cls, user):
+		vote=Vote.query(ndb.AND(Vote.v_user==user, Vote.a_id==None)).order(-Vote.v_time)
+		return vote.fetch()
+
+	@classmethod
+	def get_user_vote_all_a(cls, user):
+		vote=Vote.query(ndb.AND(Vote.v_user==user, Vote.q_id==None)).order(-Vote.v_time)
 		return vote.fetch()
 
 	@classmethod
@@ -128,7 +154,7 @@ class Vote(ndb.Model):
 		return (up_count, down_count)
 
 	@classmethod
-	def get_a_vote(cls, qid, aid):
+	def get_a_vote(cls, aid):
 		up_count=0
 		down_count=0
 		vote=Vote.query(ndb.AND(Vote.q_id==qid, Vote.a_id==aid))

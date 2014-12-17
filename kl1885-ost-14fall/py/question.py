@@ -1,25 +1,8 @@
 import webapp2, datetime, time, py.homepage as homepage, py.jinjaprint as jinjaprint, py.utility as utility
 from py.datamodel import *
+import py.vote as vote
 from google.appengine.api import users
 from google.appengine.ext import ndb
-
-def vote_q(self):######
-    v_user=users.get_current_user()
-    qid=self.request.get("qid")
-    aid=self.request.get("aid")
-    up_down=self.request.get("vote")
-    v_time=datetime.datetime.now().replace(microsecond=0)
-    key=str(v_user)+"_"+str(qid)+"_"+str(aid)
-    #newV = model.Vote(key_name=key)
-    newV=model.Vote()
-    newV.v_user=unicode(v_user)
-    newV.q_id=qid
-    newV.a_id=aid
-    newV.up_down=up_down
-    newV.v_time=v_time
-    newV.put()
-
-
 
 def put_question(self, createnew):
     current_user = users.get_current_user()
@@ -144,7 +127,7 @@ class ViewFullQuestion(webapp2.RequestHandler):
         jinjaprint.footer(self)
 
     def post(self):
-        vote_q(self)
+        vote.vote(self)
 
 
 class ListQuestion(webapp2.RequestHandler):
@@ -166,14 +149,12 @@ class ListQuestion(webapp2.RequestHandler):
                 Qs=Question.get_by_tag_user(tag, user)
                 if mine_mode:
                     jinjaprint.view_header(self, jinjaprint.HEADER_LIST_TAG_Q_MINE+tag)
-                    templ_para['list_my_question_mode']=True                    
                 else:
                     jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_Q+user+" with tag: "+tag)
             else:
                 Qs=Question.get_by_user(user)
                 if mine_mode:
                     jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_Q)
-                    templ_para['list_my_question_mode']=True                    
                 else:
                     jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_Q+user)
         else:
@@ -208,7 +189,7 @@ class ListQuestion(webapp2.RequestHandler):
             jinjaprint.footer(self)
 
     def post(self):
-        vote_q(self)
+        vote.vote(self)
 
 
 app = webapp2.WSGIApplication([

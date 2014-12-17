@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 {% autoescape true %}
 <div id="message" class="drop-shadow raised">
-	<br>
-	
-
+<br>
 <h1>{{ message | safe }}</h1>
 <br>
 {% if link %}
 <h1>You can view the result <a href='{{ link }}'>here.</a></h1>	
 <br>
-</div>
 {% endif %}
+</div>
 {% endautoescape %}

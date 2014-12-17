@@ -19,18 +19,26 @@ href="/question/list?tag={{ t }}">#{{ t }}</a>
 <p style="font-size:140%">{{ q.q_content | safe }}	
 </p>
 {%  endif %}
+
 {% if q.edit_time != None and q.edit_time != q.create_time %}
+{% if q.q_user|string() == current_user|string() %}
+<div>----Edited by You on  {{ q.edit_time }}</div>
+{% else %}
 <div>----Edited by {{ q.q_user }} on  {{ q.edit_time }}</div>
 {% endif %}
-<div>----Created by {{ q.q_user }} on {{ q.create_time }}</div>
+{% endif %}
 
+{% if q.q_user|string() == current_user|string() %}
+<div>----Asked by You on {{ q.create_time }}</div>
+{% else %}
+<div>----Asked by {{ q.q_user }} on {{ q.create_time }}</div>
+{% endif %}
 <h3><a href="/question/view?qid={{ q.q_id }}">View</a>&nbsp;&nbsp;
 <a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>
 {% if q.q_user | string() == current_user | string() %}
 &nbsp;&nbsp;<a href="/question/edit?qid={{ q.q_id }}">Edit</a>&nbsp;&nbsp;
-{% if not list_my_question_mode %}
-This question belongs to you.
-{% endif %}
+
+
 {% else %}
 &nbsp;&nbsp;<a href="/user/view?{{q.q_user}}">View this user</a>&nbsp;&nbsp;
 {% endif %}

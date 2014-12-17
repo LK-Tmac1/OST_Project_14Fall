@@ -13,7 +13,7 @@ URL_ANSWER=URL_QUESTION+'/answer'
 URL_ANSWER_LIST=URL_ANSWER+"/list"
 URL_ANSWER_ADD=URL_ANSWER+'/add'
 URL_ANSWER_EDIT=URL_ANSWER+'/edit'
-URL_ANSWER_DELETE=URL_ANSWER+'/delete'
+URL_VOTE="/vote"
 TITLE_VIEW_Q="View Question"
 TITLE_HOME="NYU Quora"
 TITLE_CREATE_Q="Ask a question"
@@ -37,6 +37,13 @@ HEADER_EDIT_A="Edit this answer: "
 HEADER_LIST_A="View all answers here: "
 HEADER_LIST_A_OTHER="View all the answers for this user: "
 HEADER_LIST_A_MY="View all my answers: "
+HEADER_LIST_MY_V_Q="View all my vote for questions:"
+HEADER_LIST_MY_V_A="View all my vote for answers:"
+HEADER_LIST_OTHER_V_A="View all vote for answers from user:"
+HEADER_LIST_OTHER_V_Q="View all vote for questions from user:"
+HEADER_LIST_MY_ALL_V="View all my vote:"
+HEADER_LIST_OTHER_ALL_V="View all vote for user:"
+HEADER_LIST_ALL_VOTE="View all votes for questions and answers:"
 TEMP_LEFT_NAV='left_nav.html'
 TEMP_HEADER='header.html'
 TEMP_CONTENT_END='content_end.html'
@@ -71,6 +78,7 @@ MESSAGE_EMPTY_A_CONTENT="Give some real stuff please..."
 MESSAGE_NO_Q_FOR_AID="So questions for answer of id: "
 MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
 MESSAGE_NO_A_FOR_MINE="Sorry you do not have answers to any others' question."
+MESSAGE_INVALID_PARA_VOTE="Invalid parameters for vote."
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)

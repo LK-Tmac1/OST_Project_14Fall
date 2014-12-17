@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<div id="message" class="drop-shadow raised">
+<br>
+<h3>
+{% if currentuser == v.v_user %}
+{% if v.q_id %}
+You voted the question of user {{ q.q_user }} on {{ v.v_time }}:<br>
+{{ q.q_title[0:20] }}...
+<a href="/question/view?qid={{ v.q_id }}">View this question</a> 
+{% else %}
+You voted the answer of user {{ a.a_user }} on {{ v.v_time }}:<br>
+{{ a.a_content[0:20] }}...<br>
+for the question of user {{q.q_user}}:<br>
+{{ q.q_title }}
+<a href="/question/view?qid={{ q.q_id }}">View this question</a> 
+{% endif %}
+{% else %}
+
+{% if v.q_id %}
+User {{ v.v_user }} voted the question of user {{ q.q_user }} on {{ v.v_time }}:<br>
+{{ q.q_title[0:20] }}...
+<a href="/question/view?qid={{ v.q_id }}">View this question</a> 
+{% else %}
+User {{ v.v_user }} voted the answer of user {{ a.a_user }} on {{ v.v_time }}:<br>
+{{ a.a_content[0:20] }}...<br>
+for the question of user {{q.q_user}}:<br>
+{{ q.q_title }}
+<a href="/question/view?qid={{ q.q_id }}">View this question</a> 
+{% endif %}
+
+
+
+{% endif %}
+</h3>
+<h3>
+</h3>
+<br>
+</div>
+{% endautoescape %}
