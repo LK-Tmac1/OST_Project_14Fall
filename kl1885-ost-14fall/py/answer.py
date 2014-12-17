@@ -32,8 +32,8 @@ def put_answer(self, add_new):
 				newA.vd_num=0
 				newA.vp_num=0
 				newA.put()
-				templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+str(qid)}
 				message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_NEW_A+"\n\n\n"+qtitle)
+				templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+str(qid)}
 				jinjaprint.return_message(self, message, templ_para)
 			else:
 				aid=str(self.request.get("aid"))

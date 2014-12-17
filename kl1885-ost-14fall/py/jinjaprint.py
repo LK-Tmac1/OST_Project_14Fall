@@ -24,6 +24,7 @@ TITLE_ADD_A="Add answer"
 TITLE_EDIT_A="Edit answer"
 TITLE_LIST_OTHER_A="See other's answers"
 TITLE_LIST_MY_A="See my answers"
+TITLE_VOTE="Vote"
 MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
 HEADER_VIEW_Q='View the full question: '
@@ -59,6 +60,7 @@ TEMP_EDIT_ANSWER='edit_answer.html'
 TEMP_PAGE_NUM='page_num.html'
 TEMP_PUT_MESSAGE='return_message.html'
 TEMP_VIEW_Q_A='view_question_answer.html'
+TEMP_LIST_V='list_vote.html'
 MESSAGE_WELCOME_BACK="Welcome back, "
 MESSAGE_HELLO_GUEST="Hello you, guest"
 MESSAGE_EMPTY_Q_TITLE="Don't be too lazy to give it a title, please..."
@@ -79,6 +81,7 @@ MESSAGE_NO_Q_FOR_AID="So questions for answer of id: "
 MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
 MESSAGE_NO_A_FOR_MINE="Sorry you do not have answers to any others' question."
 MESSAGE_INVALID_PARA_VOTE="Invalid parameters for vote."
+MESSAGE_VOTE_SUCCEED="Successfully vote this "
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)
@@ -141,3 +144,6 @@ def add_answer(self, templ_para):
 
 def edit_answer(self, templ_para):
 	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_EDIT_ANSWER).render(templ_para))	
+
+def list_vote(self, templ_para):
+	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_LIST_V).render(templ_para))	

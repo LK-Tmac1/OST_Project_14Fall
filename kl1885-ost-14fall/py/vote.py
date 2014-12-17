@@ -9,26 +9,40 @@ def vote(self):
     qid=str(self.request.get("qid"))
     aid=str(self.request.get("aid"))
     vote=None
-    if aid:
-        vote=Vote().get_user_vote_a(v_user,aid)
+    jinjaprint.header(self,jinjaprint.TITLE_VOTE)
+    jinjaprint.left_nav(self)
+    if not v_user:
+        jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
     else:
-        vote=Vote().get_user_vote_q(v_user,qid)
-    if not vote:
-        vote=Vote()
-    else:
-        vote=vote[0]
-    up_down=self.request.get("vote")
-    v_time=datetime.datetime.now().replace(microsecond=0)
-    vote.v_user=v_user
-    if aid:
-        vote.a_id=aid
-        vote.q_id=None
-    else:
-        vote.q_id=qid
-        vote.a_id=None
-    vote.up_down=up_down
-    vote.v_time=v_time
-    vote.put()
+        mode=""
+        if aid:
+            vote=Vote().get_user_vote_a(v_user,aid)
+        else:
+            vote=Vote().get_user_vote_q(v_user,qid)
+        if not vote:
+            vote=Vote()
+        else:
+            vote=vote[0]
+        up_down=self.request.get("vote")
+        v_time=datetime.datetime.now().replace(microsecond=0)
+        vote.v_user=v_user
+        if aid:
+            vote.a_id=aid
+            vote.q_id=None
+            mode="answer"
+        else:
+            vote.q_id=qid
+            vote.a_id=None
+            mode="question"
+        vote.up_down=up_down
+        vote.v_time=v_time
+        vote.put()
+        templ_para={'link': jinjaprint.URL_VOTE+"?user="+v_user+"&listmode="+mode}
+        message=jinjaprint.MESSAGE_VOTE_SUCCEED+mode+"."
+        jinjaprint.return_message(self, message, templ_para)
+
+    jinjaprint.content_end(self)
+    jinjaprint.footer(self)
 
 class ListVote(webapp2.RequestHandler):
     def get(self):
@@ -75,8 +89,20 @@ class ListVote(webapp2.RequestHandler):
             votelist=Vote.get_all_vote()
             jinjaprint.view_header(self, jinjaprint.HEADER_LIST_ALL_VOTE)
 
-        
+        for vote in votelist:
+            aid = vote.a_id
+            qid = vote.q_id
+            templ_para={}
+            a=None
+            q=None
+            if aid:
+                a = Answer.get_by_aid(aid)[0]
+            elif qid:
+                q = Question.get_by_qid(qid)[0]
+            templ_para={'a':a, 'q':q, 'v':vote, 'current_user':current_user}
+            jinjaprint.list_vote(self, templ_para)
 
+        jinjaprint.content_end(self)
         jinjaprint.footer(self)
 
 

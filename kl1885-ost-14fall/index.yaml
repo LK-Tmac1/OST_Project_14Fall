@@ -73,3 +73,17 @@ indexes:
     direction: desc
   - name: create_time
     direction: desc
+
+- kind: Vote
+  properties:
+  - name: a_id
+  - name: v_user
+  - name: v_time
+    direction: desc
+
+- kind: Vote
+  properties:
+  - name: q_id
+  - name: v_user
+  - name: v_time
+    direction: desc
