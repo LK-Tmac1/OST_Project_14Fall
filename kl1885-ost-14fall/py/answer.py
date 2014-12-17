@@ -1,4 +1,4 @@
-import webapp2, datetime, time, py.homepage as homepage, py.jinjaprint as jinjaprint, py.utility as utility
+import webapp2, datetime, py.jinjaprint as jinjaprint, py.utility as utility
 from py.datamodel import *
 import py.vote as vote
 from google.appengine.api import users
@@ -10,45 +10,48 @@ def put_answer(self, add_new):
 	qid=str(self.request.get('qid'))
 	qtitle=unicode(self.request.get('qtitle'))
 	submit=self.request.get("submit")
-	if submit.lower()=="cancel":
-		self.redirect(jinjaprint.URL_QUESTION_LIST+"?qid="+qid)
-	elif submit.lower() == "submit":
-		a_content=unicode(self.request.get("acontent"))
-		jinjaprint.header(self,jinjaprint.TITLE_ADD_A)
-		jinjaprint.left_nav(self)
+	if not current_user:
+		jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
+	else:
+		if submit.lower()=="cancel":
+			self.redirect(jinjaprint.URL_QUESTION_LIST+"?qid="+qid)
+		elif submit.lower() == "submit":
+			a_content=unicode(self.request.get("acontent"))
+			jinjaprint.header(self,jinjaprint.TITLE_ADD_A)
+			jinjaprint.left_nav(self)
 
-		if utility.check_string_empty(a_content):
-			jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_A_CONTENT)
-		else:
-			if add_new:
-				newA=Answer()
-				newA.a_user=str(current_user)
-				newA.q_id=str(qid)
-				create_time=datetime.datetime.now()
-				newA.create_time=create_time.replace(microsecond=0)
-				newA.edit_time=create_time.replace(microsecond=0)
-				newA.a_id=create_time.strftime("%s")
-				newA.a_content=a_content
-				newA.vd_num=0
-				newA.vp_num=0
-				newA.put()
-				message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_NEW_A+"\n\n\n"+qtitle)
-				templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+str(qid)}
-				jinjaprint.return_message(self, message, templ_para)
+			if utility.check_string_empty(a_content):
+				jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_A_CONTENT)
 			else:
-				aid=str(self.request.get("aid"))
-				editA=Answer.get_by_aid(aid)[0]
-				if editA.a_user != str(current_user):
-					jinjaprint.return_message(self, jinjaprint.MESSAGE_CANNOT_EDIT_A)
-				else:
-					editA.a_content=unicode(self.request.get("acontent"))
-					editA.edit_time=datetime.datetime.now().replace(microsecond=0)
-					editA.put()
-					templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+editA.q_id}
-					message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_EDIT_A)
+				if add_new:
+					newA=Answer()
+					newA.a_user=str(current_user)
+					newA.q_id=str(qid)
+					create_time=datetime.datetime.now()
+					newA.create_time=create_time.replace(microsecond=0)
+					newA.edit_time=create_time.replace(microsecond=0)
+					newA.a_id=create_time.strftime("%s")
+					newA.a_content=a_content
+					newA.vd_num=0
+					newA.vp_num=0
+					newA.put()
+					message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_NEW_A+"\n\n\n"+qtitle)
+					templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+str(qid)}
 					jinjaprint.return_message(self, message, templ_para)
-		jinjaprint.content_end(self)
-        jinjaprint.footer(self)
+				else:
+					aid=str(self.request.get("aid"))
+					editA=Answer.get_by_aid(aid)[0]
+					if editA.a_user != str(current_user):
+						jinjaprint.return_message(self, jinjaprint.MESSAGE_CANNOT_EDIT_A)
+					else:
+						editA.a_content=unicode(self.request.get("acontent"))
+						editA.edit_time=datetime.datetime.now().replace(microsecond=0)
+						editA.put()
+						templ_para={'link': jinjaprint.URL_QUESTION_VIEW+"?qid="+editA.q_id}
+						message=utility.replace_newline(jinjaprint.MESSAGE_SUCCEED_EDIT_A)
+						jinjaprint.return_message(self, message, templ_para)
+			jinjaprint.content_end(self)
+	        jinjaprint.footer(self)
 
 
 class AddAnswer(webapp2.RequestHandler):
@@ -56,7 +59,6 @@ class AddAnswer(webapp2.RequestHandler):
 		current_user = users.get_current_user()		
 		jinjaprint.header(self, jinjaprint.TITLE_ADD_A)
 		jinjaprint.left_nav(self)
-		jinjaprint.view_top_link(self)
 		jinjaprint.view_header(self, jinjaprint.HEADER_ADD_A)
 
 		if not current_user:
@@ -84,7 +86,6 @@ class EditAnswer(webapp2.RequestHandler):
 		current_user = users.get_current_user()
 		jinjaprint.header(self, jinjaprint.TITLE_EDIT_A)
 		jinjaprint.left_nav(self)
-		jinjaprint.view_top_link(self)
 		jinjaprint.view_header(self, jinjaprint.HEADER_EDIT_A)
 		aid=str(self.request.get("aid"))
 		A=Answer.get_by_aid(aid)
@@ -119,12 +120,10 @@ class ListUserAnswer(webapp2.RequestHandler):
 		if mine_mode:
 			jinjaprint.header(self, jinjaprint.TITLE_LIST_MY_A)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_MY)
 		else:
 			jinjaprint.header(self, jinjaprint.TITLE_LIST_OTHER_A)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_LIST_A_OTHER+user)
 
 		As=Answer.get_by_auser(user)

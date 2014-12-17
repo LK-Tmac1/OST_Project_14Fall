@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    {% autoescape true %}
+    <rss version="2.0">
+        <channel>
+            <title>RSS Resources</title>
+            <description>RSS file for kl1885-ost-14fall</description>
+            <link>http://kl1885-ost-14fall.appspot.com/rss?qid={{ q.q_id }}
+            </link>
+        <item>
+            <qtitle>{{ q.q_title }}</qtitle>
+            <quser>{{ q.q_user }}</quser>
+            <content>{{ q.q_content | safe }}</content>
+            <tags>{{ q.q_tags }}</tags>
+            <createtime>{{ q.create_time }}</createtime>
+            <edittime>{{ q.edit_time }}</edittime>
+            <votedownnum>{{ q.vd_num }}</votedownnum>
+            <voteupnum>{{ q.vp_num }}</voteupnum>
+            {% for a in As %}
+                <answer>
+                    <auser>{{ a.a_user }} </auser>
+                    <content> {{ a.a_content }} </content>
+                    <createtime>{{ q.create_time }}</createtime>
+            		<edittime>{{ a.edit_time }}</edittime>
+            		<votedownnum>{{ a.vd_num }}</votedownnum>
+            		<voteupnum>{{ q.vp_num }}</voteupnum>
+                </answer>
+            {% endfor %}
+        </item>
+        </channel>
+    </rss>
+    {% endautoescape %}

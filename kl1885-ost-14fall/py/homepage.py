@@ -8,7 +8,6 @@ class HomePage(webapp2.RequestHandler):
         current_user = users.get_current_user()
         jinjaprint.header(self,jinjaprint.TITLE_HOME)
         jinjaprint.left_nav(self)
-        jinjaprint.view_top_link(self)
         if current_user:
             jinjaprint.return_message(self, jinjaprint.MESSAGE_WELCOME_BACK+str(current_user))
         else:

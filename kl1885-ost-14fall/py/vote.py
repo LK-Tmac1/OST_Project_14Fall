@@ -94,7 +94,6 @@ class ListVote(webapp2.RequestHandler):
         listmode=str(self.request.get("list"))
         jinjaprint.header(self,jinjaprint.TITLE_HOME)
         jinjaprint.left_nav(self)
-        jinjaprint.view_top_link(self)
         votelist=None
 
         if v_user:

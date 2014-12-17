@@ -7,52 +7,55 @@ from google.appengine.ext import ndb
 def put_question(self, createnew):
     current_user = users.get_current_user()
     submit=self.request.get("submit")
-    if submit.lower() == "cancel":
-        self.redirect(jinjaprint.URL_QUESTION)
-    elif submit.lower() == "submit":
-        q_content=unicode(self.request.get("qcontent"))
-        q_title=unicode(self.request.get("qtitle"))
-        tag_string=unicode(self.request.get("qtags"))
-        jinjaprint.header(self,jinjaprint.TITLE_CREATE_Q)
-        jinjaprint.left_nav(self)
+    if not current_user:
+        jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
+    else:
+        if submit.lower() == "cancel":
+            self.redirect(jinjaprint.URL_QUESTION)
+        elif submit.lower() == "submit":
+            q_content=unicode(self.request.get("qcontent"))
+            q_title=unicode(self.request.get("qtitle"))
+            tag_string=unicode(self.request.get("qtags"))
+            jinjaprint.header(self,jinjaprint.TITLE_CREATE_Q)
+            jinjaprint.left_nav(self)
 
-        if utility.check_string_empty(q_title):
-            jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_TITLE)
-        elif utility.check_string_empty(q_content):
-            jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_CONTENT)
-        else:
-            if createnew:
-                newQ=Question()
-                newQ.q_user=str(current_user)
-                newQ.q_content=q_content
-                newQ.q_tags=utility.tag_split(tag_string)
-                newQ.q_title=q_title
-                create_time=datetime.datetime.now()
-                newQ.create_time=create_time.replace(microsecond=0)
-                newQ.edit_time=create_time.replace(microsecond=0)
-                newQ.q_id=create_time.strftime("%s")
-                newQ.vd_num=0
-                newQ.vp_num=0
-                newQ.put()
-                templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+newQ.q_id}
-                jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_NEW_Q, templ_para)
+            if utility.check_string_empty(q_title):
+                jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_TITLE)
+            elif utility.check_string_empty(q_content):
+                jinjaprint.return_message(self, jinjaprint.MESSAGE_EMPTY_Q_CONTENT)
             else:
-                qid=self.request.get('qid')
-                Qs=Question.get_by_qid(qid)
-                if len(Qs) == 0:
-                    jinjaprint.return_message(self,jinjaprint.MESSAGE_NO_SUCH_QID+qid)
+                if createnew:
+                    newQ=Question()
+                    newQ.q_user=str(current_user)
+                    newQ.q_content=q_content
+                    newQ.q_tags=utility.tag_split(tag_string)
+                    newQ.q_title=q_title
+                    create_time=datetime.datetime.now()
+                    newQ.create_time=create_time.replace(microsecond=0)
+                    newQ.edit_time=create_time.replace(microsecond=0)
+                    newQ.q_id=create_time.strftime("%s")
+                    newQ.vd_num=0
+                    newQ.vp_num=0
+                    newQ.put()
+                    templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+newQ.q_id}
+                    jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_NEW_Q, templ_para)
                 else:
-                    editQ=Qs[0]
-                    editQ.edit_time=datetime.datetime.now().replace(microsecond=0)
-                    editQ.q_title=q_title
-                    editQ.q_content=q_content
-                    editQ.q_tags=utility.tag_split(tag_string)
-                    editQ.put()
-                    templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+editQ.q_id}                                        
-                    jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q, templ_para)
+                    qid=self.request.get('qid')
+                    Qs=Question.get_by_qid(qid)
+                    if len(Qs) == 0:
+                        jinjaprint.return_message(self,jinjaprint.MESSAGE_NO_SUCH_QID+qid)
+                    else:
+                        editQ=Qs[0]
+                        editQ.edit_time=datetime.datetime.now().replace(microsecond=0)
+                        editQ.q_title=q_title
+                        editQ.q_content=q_content
+                        editQ.q_tags=utility.tag_split(tag_string)
+                        editQ.put()
+                        templ_para={'link' : jinjaprint.URL_QUESTION_VIEW+"?qid="+editQ.q_id}                                        
+                        jinjaprint.return_message(self,jinjaprint.MESSAGE_SUCCEED_EDIT_Q, templ_para)
 
-        jinjaprint.content_end(self)
-        jinjaprint.footer(self)
+            jinjaprint.content_end(self)
+            jinjaprint.footer(self)
 
 class CreateQuestion(webapp2.RequestHandler):
     def get(self):
@@ -102,7 +105,6 @@ class ViewFullQuestion(webapp2.RequestHandler):
         current_user = users.get_current_user()
         jinjaprint.header(self, jinjaprint.TITLE_VIEW_Q)
         jinjaprint.left_nav(self)
-        jinjaprint.view_top_link(self)
         jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_Q)
 
         qid=self.request.get("qid")
@@ -143,7 +145,6 @@ class ListQuestion(webapp2.RequestHandler):
 
         jinjaprint.header(self,jinjaprint.TITLE_HOME)
         jinjaprint.left_nav(self)
-        jinjaprint.view_top_link(self)
         if user:
             if tag:
                 Qs=Question.get_by_tag_user(tag, user)

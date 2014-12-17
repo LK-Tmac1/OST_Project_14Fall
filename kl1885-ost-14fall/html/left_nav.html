@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 {% autoescape true %}
-{% if current_user  %}
 <ul class="nav" align="center">
+  <li class="highlight">
+      <a href="/question/list">All Questions</a>
+     </li>
+     <br>
+       <li class="highlight">
+      <a href="/image/list">All Images</a>
+     </li>
+     <br>
+{% if current_user  %}
+      <li class="highlight">
+      <a href="/question/create">Add Questions</a>
+     </li>
+     <br>
      <li class="highlight">
       <a href="/question/list?user={{ current_user | string() }}">My Questions</a>
      </li>
@@ -19,10 +31,6 @@
      </li>
      <br>
      <li class="highlight">
-      <a href="/rss">RSS</a>
-     </li>
-     <br>
-     <li class="highlight">
       <a href="{{login_out_url}}">Log out</a>
      </li>
     </ul>
@@ -31,12 +39,11 @@
 <div id="content">
 <p>Login as: {{ current_user }}</p>
 {% else %}
-<ul class="nav">
      <li class="highlight">
       <a bgcolor="grey" href="{{login_out_url}}" align="center">Login</a>
      </li>
      <br>
-
+</ul>
 </div> 
 <!-- leftnav -->
 <div id="content">

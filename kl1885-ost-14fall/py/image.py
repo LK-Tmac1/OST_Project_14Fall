@@ -18,7 +18,6 @@ class ShowImage(webapp2.RequestHandler):
 		else:
 			jinjaprint.header(self, jinjaprint.TITLE_VIEW_IMAGE)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_IMAGE)
 			jinjaprint.return_message(self, jinjaprint.MESSAGE_IMAGE_NOT_FOUND+url)
 			jinjaprint.content_end(self)
@@ -29,7 +28,6 @@ class ListImage(webapp2.RequestHandler):
 	def get(self):
 		jinjaprint.header(self, jinjaprint.TITLE_VIEW_IMAGE)
 		jinjaprint.left_nav(self)
-		jinjaprint.view_top_link(self)
 		image_user=str(self.request.get('user'))
 		current_user = users.get_current_user()
 
@@ -66,7 +64,6 @@ class UploadImage(webapp2.RequestHandler):
 		else:
 			jinjaprint.header(self, jinjaprint.TITLE_UPLOAD_IMAGE)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_top_link(self)
 			jinjaprint.view_header(self, jinjaprint.HEADER_UPLOAD_IMAGE)
 			jinjaprint.upload_image(self)
 			jinjaprint.content_end(self)
@@ -88,7 +85,6 @@ class UploadImage(webapp2.RequestHandler):
 			image.put()
 			jinjaprint.header(self, jinjaprint.TITLE_UPLOAD_IMAGE)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_top_link(self)
 			temp_para={'link':image.image_url}
 			jinjaprint.return_message(self, jinjaprint.MESSAGE_IMG_UPLOADED, temp_para)
 			jinjaprint.content_end(self)

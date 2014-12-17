@@ -32,6 +32,9 @@ handlers:
 - url: /question/answer/.*
   script: py.answer.app
 
+- url: /rss
+  script: py.rss.app
+
 - url: /question/.*
   script: py.question.app
 

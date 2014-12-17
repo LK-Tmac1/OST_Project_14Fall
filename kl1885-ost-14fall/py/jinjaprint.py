@@ -17,6 +17,7 @@ URL_VOTE="/vote"
 URL_IMAGE='/image'
 URL_IMAGE_LIST=URL_IMAGE+'/list'
 URL_IMAGE_UPLOAD=URL_IMAGE+"/upload"
+URL_RSS="/rss"
 TITLE_VIEW_Q="View Question"
 TITLE_HOME="NYU Quora"
 TITLE_CREATE_Q="Ask a question"
@@ -30,6 +31,7 @@ TITLE_LIST_MY_A="See my answers"
 TITLE_VOTE="Vote"
 TITLE_VIEW_IMAGE="View image"
 TITLE_UPLOAD_IMAGE="Upload image"
+TITLE_RSS="RSS"
 MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
 HEADER_VIEW_Q='View the full question: '
@@ -59,7 +61,6 @@ TEMP_CONTENT_END='content_end.html'
 TEMP_FOOTER='footer.html'
 TEMP_CREATE_Q='create_question.html'
 TEMP_EDIT_Q='edit_question.html'
-TEMP_VIEW_TOP_LINK='view_top_link.html'
 TEMP_VIEW_HEADER='view_header.html'
 TEMP_VIEW_Q_LIST='list_question.html'
 TEMP_VIEW_Q='view_full_question.html'
@@ -71,6 +72,7 @@ TEMP_VIEW_Q_A='view_question_answer.html'
 TEMP_LIST_V='list_vote.html'
 TEMP_SHOW_IMAGE='list_image.html'
 TEMP_UPLOAD_IMAGE='upload_image.html'
+TEMP_RSS='rss_temp.xml'
 MESSAGE_WELCOME_BACK="Welcome back, "
 MESSAGE_HELLO_GUEST="Hello you, guest"
 MESSAGE_EMPTY_Q_TITLE="Don't be too lazy to give it a title, please..."
@@ -94,6 +96,8 @@ MESSAGE_INVALID_PARA_VOTE="Invalid parameters for vote."
 MESSAGE_VOTE_SUCCEED="Successfully vote!"
 MESSAGE_IMG_UPLOADED="Image uploaded!"
 MESSAGE_IMAGE_NOT_FOUND="No such an image: "
+MESSAGE_QID_REQUIRED_RSS="The parameter qid is required in the url."
+MESSAGE_NO_SUCH_QID_RSS="No such question id: "
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)
@@ -107,9 +111,6 @@ def footer(self):
 	
 def content_end(self):
     self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_CONTENT_END).render())
-
-def view_top_link(self):
-    self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_VIEW_TOP_LINK).render())
 
 def page_num_temp(self, page_num, current_page):
 	result=utility.get_previous_next_page(page_num, current_page)
@@ -165,4 +166,8 @@ def upload_image(self):
 
 def list_image(self, templ_para):
 	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_SHOW_IMAGE).render(templ_para))
+
+def rss_generator(self, templ_para):
+	self.response.headers['Content-Type'] = 'text/xml'
+	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_RSS).render(templ_para))
 

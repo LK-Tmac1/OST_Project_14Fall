@@ -42,6 +42,7 @@ href="/question/list?tag={{ t }}">#{{ t }}</a>
 {% else %}
 &nbsp;&nbsp;<a href="/user/view?{{q.q_user}}">View this user</a>&nbsp;&nbsp;
 {% endif %}
+&nbsp;&nbsp;<a href="/rss?qid={{ q.q_id }}">RSS this question</a>
 </h3>
 
 <h4>{{ q.vp_num }} Up &nbsp;&nbsp;&nbsp; {{ q.vd_num }} Down</h4>
