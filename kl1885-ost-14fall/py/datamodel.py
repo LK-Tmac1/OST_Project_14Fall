@@ -1,22 +1,28 @@
 from google.appengine.ext import ndb
 
+
 ####Image
 class Image(ndb.Model):
-	img_user=ndb.StringProperty()
-	img_url=ndb.StringProperty()
-	img_file = ndb.BlobProperty()
-	created_date=ndb.DateTimeProperty(auto_now_add=True)
+	image_url=ndb.StringProperty()
+	image_user=ndb.StringProperty()
+	image_file = ndb.BlobProperty()
+	filename=ndb.StringProperty()
+	upload_time=ndb.DateTimeProperty(auto_now_add=True)
 
 	@classmethod
-	def get_img_all(cls, user):
-		target_img=Image.query(Image.img_user == user).order(-Image.date)
+	def get_img_by_user(cls, user):
+		target_img=Image.query(Image.image_user == user).order(-Image.upload_time)
 		return target_img.fetch()
 
 	@classmethod
-	def get_img_one(cls, user, url):
-		target_img=Image.query(ndb.AND(Image.img_user == user, \
-			Image.img_url==url)).order(-Image.date)
+	def get_img_by_url(cls, url):
+		target_img=Image.query(Image.image_url==url).order(-Image.upload_time)
 		return target_img.fetch()
+
+	@classmethod
+	def get_img_all(cls):
+		imagelist= Image.query().order(-Image.upload_time)
+		return imagelist.fetch()
 
 ####Question
 class Question(ndb.Model):

@@ -8,8 +8,14 @@ handlers:
 - url: /css
   static_dir: css
 
-- url: /image
-  static_dir: image
+- url: /img
+  static_dir: img
+
+- url: /image/upload
+  script: py.image.app
+
+- url: /image.*
+  script: py.image.app
 
 - url: /vote
   script: py.vote.app

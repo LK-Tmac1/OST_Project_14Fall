@@ -25,6 +25,14 @@ indexes:
 
 - kind: Answer
   properties:
+  - name: a_user
+  - name: v_diff
+    direction: desc
+  - name: edit_time
+    direction: desc
+
+- kind: Answer
+  properties:
   - name: q_id
   - name: create_time
     direction: desc
@@ -41,6 +49,18 @@ indexes:
   - name: v_diff
     direction: desc
   - name: edit_time
+    direction: desc
+
+- kind: Image
+  properties:
+  - name: image_url
+  - name: upload_time
+    direction: desc
+
+- kind: Image
+  properties:
+  - name: image_user
+  - name: upload_time
     direction: desc
 
 - kind: Question
@@ -60,6 +80,14 @@ indexes:
   - name: q_tags
   - name: q_user
   - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: q_tags
+  - name: v_diff
+    direction: desc
+  - name: edit_time
     direction: desc
 
 - kind: Question

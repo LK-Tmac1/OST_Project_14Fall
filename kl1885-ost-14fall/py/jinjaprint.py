@@ -14,6 +14,9 @@ URL_ANSWER_LIST=URL_ANSWER+"/list"
 URL_ANSWER_ADD=URL_ANSWER+'/add'
 URL_ANSWER_EDIT=URL_ANSWER+'/edit'
 URL_VOTE="/vote"
+URL_IMAGE='/image'
+URL_IMAGE_LIST=URL_IMAGE+'/list'
+URL_IMAGE_UPLOAD=URL_IMAGE+"/upload"
 TITLE_VIEW_Q="View Question"
 TITLE_HOME="NYU Quora"
 TITLE_CREATE_Q="Ask a question"
@@ -25,6 +28,8 @@ TITLE_EDIT_A="Edit answer"
 TITLE_LIST_OTHER_A="See other's answers"
 TITLE_LIST_MY_A="See my answers"
 TITLE_VOTE="Vote"
+TITLE_VIEW_IMAGE="View image"
+TITLE_UPLOAD_IMAGE="Upload image"
 MODE_TAG_MY_Q='mine'
 MODE_TAG_ALL_Q='all'
 HEADER_VIEW_Q='View the full question: '
@@ -45,6 +50,9 @@ HEADER_LIST_OTHER_V_Q="View all vote for questions from user:"
 HEADER_LIST_MY_ALL_V="View all my vote:"
 HEADER_LIST_OTHER_ALL_V="View all vote for user:"
 HEADER_LIST_ALL_VOTE="View all votes for questions and answers:"
+HEADER_LIST_ALL_IMAGE="List all images:"
+HEADER_LIST_USER_IMAGE="List images for "
+HEADER_UPLOAD_IMAGE="Upload an image:"
 TEMP_LEFT_NAV='left_nav.html'
 TEMP_HEADER='header.html'
 TEMP_CONTENT_END='content_end.html'
@@ -61,6 +69,8 @@ TEMP_PAGE_NUM='page_num.html'
 TEMP_PUT_MESSAGE='return_message.html'
 TEMP_VIEW_Q_A='view_question_answer.html'
 TEMP_LIST_V='list_vote.html'
+TEMP_SHOW_IMAGE='list_image.html'
+TEMP_UPLOAD_IMAGE='upload_image.html'
 MESSAGE_WELCOME_BACK="Welcome back, "
 MESSAGE_HELLO_GUEST="Hello you, guest"
 MESSAGE_EMPTY_Q_TITLE="Don't be too lazy to give it a title, please..."
@@ -82,6 +92,8 @@ MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
 MESSAGE_NO_A_FOR_MINE="Sorry you do not have answers to any others' question."
 MESSAGE_INVALID_PARA_VOTE="Invalid parameters for vote."
 MESSAGE_VOTE_SUCCEED="Successfully vote!"
+MESSAGE_IMG_UPLOADED="Image uploaded!"
+MESSAGE_IMAGE_NOT_FOUND="No such an image: "
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)
@@ -146,4 +158,11 @@ def edit_answer(self, templ_para):
 	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_EDIT_ANSWER).render(templ_para))	
 
 def list_vote(self, templ_para):
-	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_LIST_V).render(templ_para))	
+	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_LIST_V).render(templ_para))
+
+def upload_image(self):
+	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_UPLOAD_IMAGE).render())
+
+def list_image(self, templ_para):
+	self.response.write(JINJA_ENVIRONMENT.get_template(TEMP_SHOW_IMAGE).render(templ_para))
+

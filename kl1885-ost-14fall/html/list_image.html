@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% autoescape true %}
+{%  for image in imageList %}
+<div id="viewimage" class="drop-shadow raised">
+<a href="{{ image.image_url }}"><h2>Permentlink</h2></a>
+<h3>Uploaded on {{ image.upload_time }} by<a href="/user?username={{ image.image_user }}">
+{% if image.image_user | string() == currentuser | string() %}
+you
+{% else %}
+user: image.image_user
+{% endif %}
+</a></h3>
+<img src="{{ image.image_url }}" >
+<br>
+<br>
+{% if image.image_user | string() == currentuser | string() %}
+<form enctype="multipart/form-data" method="post">
+&nbsp;&nbsp;
+<input type='hidden' value="{{ image.image_id }}" name='imageid'>
+<input type='hidden' value="{{ image.image_user }}" name='imageuser'>
+<input type='submit' value='Delete' name='delete'  />
+</form>
+{% endif %}
+</div>
+{% endfor %}
+{% endautoescape %}
