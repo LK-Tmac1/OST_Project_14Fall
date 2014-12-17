@@ -16,7 +16,7 @@ user: image.image_user
 {% if image.image_user | string() == currentuser | string() %}
 <form enctype="multipart/form-data" method="post">
 &nbsp;&nbsp;
-<input type='hidden' value="{{ image.image_id }}" name='imageid'>
+<input type='hidden' value="{{ image.image_url }}" name='image_url'>
 <input type='hidden' value="{{ image.image_user }}" name='imageuser'>
 <input type='submit' value='Delete' name='delete'  />
 </form>
