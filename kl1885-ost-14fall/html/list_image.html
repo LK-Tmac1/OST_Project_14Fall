@@ -7,7 +7,7 @@
 {% if image.image_user | string() == currentuser | string() %}
 you
 {% else %}
-user: image.image_user
+user: {{ image.image_user }}
 {% endif %}
 </a></h3>
 <img src="{{ image.image_url }}" >
