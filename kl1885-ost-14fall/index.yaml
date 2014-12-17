@@ -35,6 +35,14 @@ indexes:
   - name: edit_time
     direction: desc
 
+- kind: Answer
+  properties:
+  - name: q_id
+  - name: v_diff
+    direction: desc
+  - name: edit_time
+    direction: desc
+
 - kind: Question
   properties:
   - name: q_tags
@@ -72,6 +80,13 @@ indexes:
   - name: edit_time
     direction: desc
   - name: create_time
+    direction: desc
+
+- kind: Question
+  properties:
+  - name: v_diff
+    direction: desc
+  - name: edit_time
     direction: desc
 
 - kind: Vote

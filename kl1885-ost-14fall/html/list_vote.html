@@ -2,47 +2,24 @@
 {% autoescape true %}
 <div id="message" class="drop-shadow raised">
 <br>
-<h1>
-{% if currentuser == v.v_user %}
+<h3>
 {% if v.q_id %}
-You voted the question of user {{ q.q_user }} on {{ v.v_time }}:<br>
-{{ q.q_title[0:20] }}...
-<br>
-<br>
-<br>
-<a href="/question/view?qid={{ v.q_id }}">View this question</a> 
+User {{ v.v_user }} voted {{ v.up_down }} for question:
+<br><br>{{ q.q_title }}<br>
 {% else %}
-You voted the answer of user {{ a.a_user }} on {{ v.v_time }}:<br>
-{{ a.a_content[0:20] }}...<br>
-for the question of user {{q.q_user}}:<br>
-{{ q.q_title }}
-<br>
-<br>
-<br>
-<a href="/question/view?qid={{ q.q_id }}">View this question</a> 
+User {{ v.v_user }} voted {{ v.up_down }} for answer:
+{% if a.a_content| length >200 %}
+<br><br>{{ a.a_content[0:200] }}...(view full question)<br>
+{% else %}
+<br><br>{{ a.a_content }}<br>
 {% endif %}
-{% else %}
-
-{% if v.q_id %}
-User {{ v.v_user }} voted the question of user {{ q.q_user }} on {{ v.v_time }}:<br>
-{{ q.q_title[0:20] }}...
-<br>
-<br>
-<br>
-<a href="/question/view?qid={{ v.q_id }}">View this question</a> 
-{% else %}
-User {{ v.v_user }} voted the answer of user {{ a.a_user }} on {{ v.v_time }}:<br>
-{{ a.a_content[0:20] }}...<br>
-for the question of user {{q.q_user}}:<br>
-{{ q.q_title }}
-<br>
-<br>
-<br>
-<a href="/question/view?qid={{ q.q_id }}">View this question</a> 
+for question <br><br>{{ q.q_title }}<br>of user {{ q.q_user }}
 {% endif %}
 
-{% endif %}
-</h1>
-<br>
+</h3>
+<h4>
+<br>Voted time: {{ v.v_time }}:
+<br><a href="/question/view?qid={{ v.q_id }}">View this question</a> 
+</h4>
 </div>
 {% endautoescape %}

@@ -141,8 +141,7 @@ class ListUserAnswer(webapp2.RequestHandler):
 				if Qs[0] not in relatedQs:
 					relatedQs.append(Qs[0])
 			for q in relatedQs:
-				templ_para={"q": q, "view_my_question" : mine_mode, 
-				'view_question_mode': True}
+				templ_para={"q": q, "view_my_question" : mine_mode, 'view_question_mode': True}
 				jinjaprint.view_full_question(self, templ_para)
 				userAs = Answer.get_by_user_qid(user, q.q_id)
 				templ_para["As"]=userAs

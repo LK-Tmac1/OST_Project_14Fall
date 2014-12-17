@@ -8,41 +8,84 @@ def vote(self):
     v_user=str(users.get_current_user())
     qid=str(self.request.get("qid"))
     aid=str(self.request.get("aid"))
-    vote=None
+    retirect=str(self.request.get("redirect"))
     jinjaprint.header(self,jinjaprint.TITLE_VOTE)
     jinjaprint.left_nav(self)
-    if not v_user:
+    vote=None
+    if not users.get_current_user():
         jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
     else:
         mode=""
+        new = False
+        vote_a=None
+        vote_q=None
         if aid:
-            vote=Vote().get_user_vote_a(v_user,aid)
+            mode="answer"
+            vote=Vote.get_user_vote_a(v_user,aid)
+            vote_a = Answer.get_by_aid(aid)[0]
         else:
-            vote=Vote().get_user_vote_q(v_user,qid)
+            mode="question"
+            vote=Vote.get_user_vote_q(v_user,qid)
+            vote_q=Question.get_by_qid(qid)[0]
         if not vote:
             vote=Vote()
+            new=True
         else:
             vote=vote[0]
+            old_up_down=vote.up_down
+            new = False
         up_down=self.request.get("vote")
         v_time=datetime.datetime.now().replace(microsecond=0)
         vote.v_user=v_user
         if aid:
             vote.a_id=aid
             vote.q_id=None
-            mode="answer"
         else:
             vote.q_id=qid
             vote.a_id=None
-            mode="question"
         vote.up_down=up_down
+        if up_down.lower() == "up":
+            if aid:
+                if not new:
+                    if old_up_down.lower() == "down":
+                        vote_a.vd_num-=1
+                        vote_a.vp_num+=1
+                else:
+                    vote_a.vp_num+=1
+                vote_a.put()
+            else:
+                if not new:
+                    if old_up_down.lower() == "down":
+                        vote_q.vd_num-=1                
+                        vote_q.vp_num+=1 
+                else:
+                    vote_q.vp_num+=1
+                vote_q.put()
+        else:
+            if aid:
+                if not new:
+                    if old_up_down.lower() == "up":
+                        vote_a.vp_num-=1
+                        vote_a.vd_num+=1
+                else:
+                    vote_a.vd_num+=1
+                vote_a.put()
+            else:
+                if not new:
+                    if old_up_down.lower() == "up":
+                        vote_q.vp_num-=1
+                        vote_q.vd_num+=1
+                else:
+                    vote_q.vd_num+=1
+                vote_q.put()
+
         vote.v_time=v_time
         vote.put()
         templ_para={'link': jinjaprint.URL_VOTE+"?user="+v_user+"&listmode="+mode}
-        message=jinjaprint.MESSAGE_VOTE_SUCCEED+mode+"."
-        jinjaprint.return_message(self, message, templ_para)
+        jinjaprint.return_message(self, jinjaprint.MESSAGE_VOTE_SUCCEED, templ_para)
+        jinjaprint.content_end(self)
+        jinjaprint.footer(self)
 
-    jinjaprint.content_end(self)
-    jinjaprint.footer(self)
 
 class ListVote(webapp2.RequestHandler):
     def get(self):
@@ -97,9 +140,10 @@ class ListVote(webapp2.RequestHandler):
             q=None
             if aid:
                 a = Answer.get_by_aid(aid)[0]
+                q = Question.get_by_qid(a.q_id)[0]
             elif qid:
                 q = Question.get_by_qid(qid)[0]
-            templ_para={'a':a, 'q':q, 'v':vote, 'current_user':current_user}
+            templ_para={'a':a, 'q':q, 'v':vote, 'currentuser':current_user}
             jinjaprint.list_vote(self, templ_para)
 
         jinjaprint.content_end(self)

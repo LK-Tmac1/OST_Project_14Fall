@@ -47,6 +47,7 @@ href="/question/list?tag={{ t }}">#{{ t }}</a>
 <h4>{{ q.vp_num }} Up &nbsp;&nbsp;&nbsp; {{ q.vd_num }} Down</h4>
 <form enctype="multipart/form-data" method="post">
 <input type='hidden' value="{{ q.q_id }}" name='qid'>
+<input type='hidden' value="/question/view?qid={{ q.q_id }}" name='redirect'>
 <input type='submit' value='Up' name='vote'  />
 &nbsp;&nbsp;<input type='submit' value='Down' name='vote' />
 </form>

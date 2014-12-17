@@ -81,7 +81,7 @@ MESSAGE_NO_Q_FOR_AID="So questions for answer of id: "
 MESSAGE_NO_A_FOR_OTHER="Sorry there is no answer by this user: "
 MESSAGE_NO_A_FOR_MINE="Sorry you do not have answers to any others' question."
 MESSAGE_INVALID_PARA_VOTE="Invalid parameters for vote."
-MESSAGE_VOTE_SUCCEED="Successfully vote this "
+MESSAGE_VOTE_SUCCEED="Successfully vote!"
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader('html'),
 	extensions=['jinja2.ext.autoescape'], autoescape=True)

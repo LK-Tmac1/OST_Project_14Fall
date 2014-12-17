@@ -29,6 +29,7 @@ class Question(ndb.Model):
 	edit_time=ndb.DateTimeProperty(auto_now_add=True)
 	vd_num=ndb.IntegerProperty()
 	vp_num=ndb.IntegerProperty()
+	v_diff = ndb.ComputedProperty(lambda self: self.vp_num - self.vd_num)
 
 	@classmethod
 	def get_by_qid(cls, qid):
@@ -38,27 +39,27 @@ class Question(ndb.Model):
 	@classmethod
 	def get_by_user(cls, quser):
 		question=Question.query(Question.q_user==quser).\
-		order(-Question.edit_time).order(-Question.edit_time)
+		order(-Question.edit_time).order(-Question.v_diff).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_all(cls):
-		question=Question.query().order(-Question.edit_time)
+		question=Question.query().order(-Question.v_diff).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag(cls, tag):
-		question=Question.query(Question.q_tags.IN([tag])).order(-Question.edit_time)
+		question=Question.query(Question.q_tags.IN([tag])).order(-Question.v_diff).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag_user(cls, tag, user):
-		question=Question.query(ndb.AND(Question.q_tags.IN[tag], Question.q_user==user)).order(-Question.edit_time)
+		question=Question.query(ndb.AND(Question.q_tags.IN[tag], Question.q_user==user)).order(-Question.v_diff).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag_user(cls, tag, user):
-		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.edit_time)
+		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.v_diff).order(-Question.edit_time)
 		return question.fetch()
 
 ####Answer
@@ -71,16 +72,17 @@ class Answer(ndb.Model):
 	edit_time=ndb.DateTimeProperty(auto_now_add=True)
 	vp_num=ndb.IntegerProperty()
 	vd_num=ndb.IntegerProperty()
+	v_diff = ndb.ComputedProperty(lambda self: self.vp_num - self.vd_num)
 
 	@classmethod
 	def get_by_user_qid(cls, auser, qid):
 		answer=Answer.query(ndb.AND(Answer.q_id==qid, Answer.a_user==auser) \
-			).order(-Answer.edit_time)
+			).order(-Answer.v_diff).order(-Answer.edit_time)
 		return answer.fetch()
 
 	@classmethod
 	def get_by_qid(cls, qid):
-		answer=Answer.query(Answer.q_id==qid).order(-Answer.edit_time)
+		answer=Answer.query(Answer.q_id==qid).order(-Answer.v_diff).order(-Answer.edit_time)
 		return answer.fetch()
 	
 	@classmethod
@@ -90,7 +92,7 @@ class Answer(ndb.Model):
 
 	@classmethod
 	def get_by_auser(cls, auser):
-		answer=Answer.query(Answer.a_user==str(auser)).order(-Answer.edit_time)
+		answer=Answer.query(Answer.a_user==str(auser)).order(-Answer.v_diff).order(-Answer.edit_time)
 		return answer.fetch()
 
 ####Vote
