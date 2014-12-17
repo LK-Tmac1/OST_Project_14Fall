@@ -94,42 +94,29 @@ class ListVote(webapp2.RequestHandler):
         listmode=str(self.request.get("list"))
         jinjaprint.header(self,jinjaprint.TITLE_HOME)
         jinjaprint.left_nav(self)
+        jinjaprint.view_header(self, jinjaprint.HEADER_LIST_VOTE)
         votelist=None
 
         if v_user:
             if listmode:
                 if listmode.lower()=="question":
-                    if current_user == v_user:
-                        jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_V_Q)
-                    else:
-                        jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_V_Q+v_user)
                     votelist=Vote.get_user_vote_all_q(v_user)
                 elif listmode.lower()=="answer":
                     votelist=Vote.get_user_vote_all_a(v_user)
-                    if current_user == v_user:
-                        jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_V_A)
-                    else:
-                        jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_V_Q+v_user)
                     jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_V_Q)
                 else:
                     jinjaprint.return_message(jinjaprint.MESSAGE_INVALID_PARA_VOTE)
             else:
                 votelist=Vote.get_user_all_vote(v_user)
-                if current_user == v_user:
-                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_ALL_V)
-                else:
-                    jinjaprint.view_header(self, jinjaprint.HEADER_LIST_OTHER_ALL_V+v_user)
         elif listmode:
             if listmode.lower()=="question":
                 votelist=Vote.get_q_all_vote(v_user)
-                jinjaprint.view_header(self, jinjaprint.HEADER_LIST_MY_V_A)
             elif listmode.lower()=="answer":
                 votelist=Vote.get_a_all_vote(v_user)
             else:
                 jinjaprint.return_message(jinjaprint.MESSAGE_INVALID_PARA_VOTE)
         else:
             votelist=Vote.get_all_vote()
-            jinjaprint.view_header(self, jinjaprint.HEADER_LIST_ALL_VOTE)
 
         for vote in votelist:
             aid = vote.a_id
