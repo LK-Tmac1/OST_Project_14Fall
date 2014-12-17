@@ -37,10 +37,8 @@ href="/question/list?tag={{ t }}">#{{ t }}</a>
 <a href="/question/answer/add?qid={{ q.q_id }}">Answer</a>
 {% if q.q_user | string() == current_user | string() %}
 &nbsp;&nbsp;<a href="/question/edit?qid={{ q.q_id }}">Edit</a>&nbsp;&nbsp;
-
-
 {% else %}
-&nbsp;&nbsp;<a href="/user/view?{{q.q_user}}">View this user</a>&nbsp;&nbsp;
+&nbsp;&nbsp;
 {% endif %}
 &nbsp;&nbsp;<a href="/rss?qid={{ q.q_id }}">RSS this question</a>
 </h3>

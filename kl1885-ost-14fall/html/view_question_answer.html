@@ -28,7 +28,6 @@
 {% if a.a_user|string() ==  current_user|string() %}
 <h3><a href="/question/answer/edit?aid={{ a.a_id }}">Edit answer</a></h3>
 {% else %}
-<h3><a href="/user/view?{{a.a_user}}">View this user</a></h3>
 {% endif %}
 
 

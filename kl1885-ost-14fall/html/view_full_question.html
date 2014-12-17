@@ -30,8 +30,6 @@
 <h3>
 {% if q.q_user|string() == current_user|string() %}
 <a href="/question/edit?qid={{ q.q_id }}">Edit</a>
-{% else %}
-<a href="/user/view?{{q.q_user}}">View this user</a>
 {% endif %}
 {% if not answer_mode %}
 &nbsp;&nbsp;

@@ -3,13 +3,13 @@
 {%  for image in imageList %}
 <div id="viewimage" class="drop-shadow raised">
 <a href="{{ image.image_url }}"><h2>Permentlink</h2></a>
-<h3>Uploaded on {{ image.upload_time }} by<a href="/user?username={{ image.image_user }}">
+<h3>Uploaded on {{ image.upload_time }} by
 {% if image.image_user | string() == currentuser | string() %}
 you
 {% else %}
 user: {{ image.image_user }}
 {% endif %}
-</a></h3>
+</h3>
 <img src="{{ image.image_url }}" >
 <br>
 <br>
