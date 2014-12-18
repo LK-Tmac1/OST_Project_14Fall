@@ -45,27 +45,27 @@ class Question(ndb.Model):
 	@classmethod
 	def get_by_user(cls, quser):
 		question=Question.query(Question.q_user==quser).\
-		order(-Question.edit_time).order(-Question.v_diff).order(-Question.edit_time)
+		order(-Question.edit_time).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_all(cls):
-		question=Question.query().order(-Question.v_diff).order(-Question.edit_time)
+		question=Question.query().order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag(cls, tag):
-		question=Question.query(Question.q_tags.IN([tag])).order(-Question.v_diff).order(-Question.edit_time)
+		question=Question.query(Question.q_tags.IN([tag])).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag_user(cls, tag, user):
-		question=Question.query(ndb.AND(Question.q_tags.IN[tag], Question.q_user==user)).order(-Question.v_diff).order(-Question.edit_time)
+		question=Question.query(ndb.AND(Question.q_tags.IN[tag], Question.q_user==user)).order(-Question.edit_time)
 		return question.fetch()
 
 	@classmethod
 	def get_by_tag_user(cls, tag, user):
-		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.v_diff).order(-Question.edit_time)
+		question=Question.query(ndb.AND(Question.q_tags.IN([tag]), Question.q_user==user)).order(-Question.edit_time)
 		return question.fetch()
 
 ####Answer
