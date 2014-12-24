@@ -1,5 +1,4 @@
-import webapp2, math, py.jinjaprint as jinjaprint, py.utility as utility
-from py.datamodel import *
+import webapp2, py.jinjaprint as jinjaprint
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
