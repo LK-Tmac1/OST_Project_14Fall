@@ -18,7 +18,7 @@ class ShowImage(webapp2.RequestHandler):
 		else:
 			jinjaprint.header(self, jinjaprint.TITLE_VIEW_IMAGE)
 			jinjaprint.left_nav(self)
-			jinjaprint.view_header(self, jinjaprint.HEADER_VIEW_IMAGE)
+			jinjaprint.view_header(self, jinjaprint.HEADER_UPLOAD_IMAGE)
 			jinjaprint.return_message(self, jinjaprint.MESSAGE_IMAGE_NOT_FOUND+url)
 			jinjaprint.content_end(self)
 			jinjaprint.footer(self)
@@ -111,6 +111,6 @@ class UploadImage(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     (jinjaprint.URL_IMAGE_LIST, ListImage ),
-    (jinjaprint.URL_IMAGE+"/.*", ShowImage),
-    (jinjaprint.URL_IMAGE_UPLOAD, UploadImage)
+    (jinjaprint.URL_IMAGE_UPLOAD, UploadImage),
+    (jinjaprint.URL_IMAGE+"/.*", ShowImage)
 ], debug=True)

@@ -177,7 +177,7 @@ class ListQuestion(webapp2.RequestHandler):
             max_page_num=utility.max_page_num(len(Qs))
             Qs=utility.split_element_by_page_num(Qs,page_num)
             for q in Qs:
-                q.q_content=utility.replace_content(q.q_content)
+                q.q_content=utility.replace_newline(q.q_content)
                 
             if len(Qs) != 0:
                 jinjaprint.page_num_temp(self, max_page_num, current_page=page_num)
