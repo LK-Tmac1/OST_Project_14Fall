@@ -56,6 +56,9 @@ class ListImage(webapp2.RequestHandler):
 	def post(self):
 		image_url=str(self.request.get("image_url"))
 		current_user=users.get_current_user()
+		jinjaprint.header(self, jinjaprint.TITLE_VIEW_IMAGE)
+		jinjaprint.left_nav(self)
+
 		if not current_user:
 			jinjaprint.return_message(self, jinjaprint.MESSAGE_LOGIN_FIRST)
 		else:
@@ -64,13 +67,14 @@ class ListImage(webapp2.RequestHandler):
 				image=image[0]
 				if str(current_user) == image.image_user:
 					image.key.delete()
-					jinjaprint.return_message(self, "success")
-					self.redirect(jinjaprint.URL_IMAGE_LIST)
+					jinjaprint.return_message(self, jinjaprint.MESSAGE_SUCCESS_DELETE_IMAGE)
 				else:
 					jinjaprint.return_message(self, jinjaprint.MESSAGE_NO_RIGHT_DELETE_IMAGE)
 			else:
-				jinjaprint.return_message(self, jinjaprint.MESSAGE_IMAGE_NOT_FOUND+image_url)				
-
+				jinjaprint.return_message(self, jinjaprint.MESSAGE_IMAGE_NOT_FOUND+image_url)
+		
+		jinjaprint.content_end(self)
+		jinjaprint.footer(self)
 
 
 class UploadImage(webapp2.RequestHandler):

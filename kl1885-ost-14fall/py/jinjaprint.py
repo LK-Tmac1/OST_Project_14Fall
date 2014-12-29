@@ -91,6 +91,7 @@ MESSAGE_VOTE_SUCCEED="Successfully vote!"
 MESSAGE_IMG_UPLOADED="Image uploaded!"
 MESSAGE_NO_RIGHT_DELETE_IMAGE="You do not have right to delete this image!"
 MESSAGE_IMAGE_NOT_FOUND="No images."
+MESSAGE_SUCCESS_DELETE_IMAGE="Image deleted."
 MESSAGE_QID_REQUIRED_RSS="The parameter qid is required in the url."
 MESSAGE_NO_SUCH_QID_RSS="No such question id: "
 
